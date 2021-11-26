@@ -1,3 +1,63 @@
+const enum IrButton {
+    //% block="any"
+    Any = -1,
+    //% block="▲"
+    Up = 0x62,
+    //% block=" "
+    Unused_2 = -2,
+    //% block="◀"
+    Left = 0x22,
+    //% block="OK"
+    Ok = 0x02,
+    //% block="▶"
+    Right = 0xc2,
+    //% block=" "
+    Unused_3 = -3,
+    //% block="▼"
+    Down = 0xa8,
+    //% block=" "
+    Unused_4 = -4,
+    //% block="1"
+    Number_1 = 0x68,
+    //% block="2"
+    Number_2 = 0x98,
+    //% block="3"
+    Number_3 = 0xb0,
+    //% block="4"
+    Number_4 = 0x30,
+    //% block="5"
+    Number_5 = 0x18,
+    //% block="6"
+    Number_6 = 0x7a,
+    //% block="7"
+    Number_7 = 0x10,
+    //% block="8"
+    Number_8 = 0x38,
+    //% block="9"
+    Number_9 = 0x5a,
+    //% block="*"
+    Star = 0x42,
+    //% block="0"
+    Number_0 = 0x4a,
+    //% block="#"
+    Hash = 0x52,
+}
+
+const enum IrButtonAction {
+    //% block="pressed"
+    Pressed = 0,
+    //% block="released"
+    Released = 1,
+}
+
+const enum IrProtocol {
+    //% block="Keyestudio"
+    Keyestudio = 0,
+    //% block="NEC"
+    NEC = 1,
+}
+
+
 
 /**
  * Functions to luckycar by DeeJoin Co.,Ltd.
