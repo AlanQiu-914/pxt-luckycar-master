@@ -5,7 +5,7 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "background": "github:AlanQiu-914/pxt-luckycar-background-main#v0.0.1",
+        //"background": "github:AlanQiu-914/pxt-luckycar-background-main#v0.0.1",
         "microphone": "*"
     },
     "files": [
