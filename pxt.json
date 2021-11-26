@@ -1,22 +1,18 @@
 {
     "name": "pxt-luckycar-master",
-    "version": "0.0.0",
-    "description": "",
     "dependencies": {
         "core": "*",
-        "radio": "*",
-        //"background": "github:AlanQiu-914/pxt-luckycar-background-main#v0.0.1",
         "microphone": "*"
     },
     "files": [
+        ".vscode/settings.json",
+        ".vscode/tasks.json",
         "README.md",
         "main.blocks",
-        "main.ts"
+        "main.ts",
+        "test.ts",
+        "tsconfig.json"
     ],
-    "testFiles": [
-        "test.ts"
-    ],
-    "public": true,
     "targetVersions": {
         "target": "4.0.16",
         "targetId": "microbit"
