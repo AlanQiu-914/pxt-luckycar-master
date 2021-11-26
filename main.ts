@@ -217,6 +217,170 @@ namespace luckycar {
         }
     }
     ///////////////////////
+    let irState: IrState;
+
+    const IR_REPEAT = 256;
+    const IR_INCOMPLETE = 257;
+    const IR_DATAGRAM = 258;
+
+    const REPEAT_TIMEOUT_MS = 120;
+
+    interface IrState {
+        protocol: IrProtocol;
+        hasNewDatagram: boolean;
+        bitsReceived: uint8;
+        addressSectionBits: uint16;
+        commandSectionBits: uint16;
+        hiword: uint16;
+        loword: uint16;
+        activeCommand: number;
+        repeatTimeout: number;
+        onIrButtonPressed: IrButtonHandler[];
+        onIrButtonReleased: IrButtonHandler[];
+        onIrDatagram: () => void;
+    }
+    class IrButtonHandler {
+        irButton: IrButton;
+        onEvent: () => void;
+
+        constructor(
+            irButton: IrButton,
+            onEvent: () => void
+        ) {
+            this.irButton = irButton;
+            this.onEvent = onEvent;
+        }
+    }
+
+
+    function appendBitToDatagram(bit: number): number {
+        irState.bitsReceived += 1;
+
+        if (irState.bitsReceived <= 8) {
+            irState.hiword = (irState.hiword << 1) + bit;
+            if (irState.protocol === IrProtocol.Keyestudio && bit === 1) {
+                // recover from missing message bits at the beginning
+                // Keyestudio address is 0 and thus missing bits can be detected
+                // by checking for the first inverse address bit (which is a 1)
+                irState.bitsReceived = 9;
+                irState.hiword = 1;
+            }
+        } else if (irState.bitsReceived <= 16) {
+            irState.hiword = (irState.hiword << 1) + bit;
+        } else if (irState.bitsReceived <= 32) {
+            irState.loword = (irState.loword << 1) + bit;
+        }
+
+        if (irState.bitsReceived === 32) {
+            irState.addressSectionBits = irState.hiword & 0xffff;
+            irState.commandSectionBits = irState.loword & 0xffff;
+            return IR_DATAGRAM;
+        } else {
+            return IR_INCOMPLETE;
+        }
+    }
+
+    function decode(markAndSpace: number): number {
+        if (markAndSpace < 1600) {
+            // low bit
+            return appendBitToDatagram(0);
+        } else if (markAndSpace < 2700) {
+            // high bit
+            return appendBitToDatagram(1);
+        }
+
+        irState.bitsReceived = 0;
+
+        if (markAndSpace < 12500) {
+            // Repeat detected
+            return IR_REPEAT;
+        } else if (markAndSpace < 14500) {
+            // Start detected
+            return IR_INCOMPLETE;
+        } else {
+            return IR_INCOMPLETE;
+        }
+    }
+
+    function enableIrMarkSpaceDetection(pin: DigitalPin) {
+        pins.setPull(pin, PinPullMode.PullNone);
+
+        let mark = 0;
+        let space = 0;
+
+        pins.onPulsed(pin, PulseValue.Low, () => {
+            // HIGH, see https://github.com/microsoft/pxt-microbit/issues/1416
+            mark = pins.pulseDuration();
+        });
+
+        pins.onPulsed(pin, PulseValue.High, () => {
+            // LOW
+            space = pins.pulseDuration();
+            const status = decode(mark + space);
+
+            if (status !== IR_INCOMPLETE) {
+                handleIrEvent(status);
+            }
+        });
+    }
+
+    function handleIrEvent(irEvent: number) {
+
+        // Refresh repeat timer
+        if (irEvent === IR_DATAGRAM || irEvent === IR_REPEAT) {
+            irState.repeatTimeout = input.runningTime() + REPEAT_TIMEOUT_MS;
+        }
+
+        if (irEvent === IR_DATAGRAM) {
+            irState.hasNewDatagram = true;
+
+            if (irState.onIrDatagram) {
+                background.schedule(irState.onIrDatagram, background.Thread.UserCallback, background.Mode.Once, 0);
+            }
+
+            const newCommand = irState.commandSectionBits >> 8;
+
+            // Process a new command
+            if (newCommand !== irState.activeCommand) {
+
+                if (irState.activeCommand >= 0) {
+                    const releasedHandler = irState.onIrButtonReleased.find(h => h.irButton === irState.activeCommand || IrButton.Any === h.irButton);
+                    if (releasedHandler) {
+                        background.schedule(releasedHandler.onEvent, background.Thread.UserCallback, background.Mode.Once, 0);
+                    }
+                }
+
+                const pressedHandler = irState.onIrButtonPressed.find(h => h.irButton === newCommand || IrButton.Any === h.irButton);
+                if (pressedHandler) {
+                    background.schedule(pressedHandler.onEvent, background.Thread.UserCallback, background.Mode.Once, 0);
+                }
+
+                irState.activeCommand = newCommand;
+            }
+        }
+    }
+
+    function initIrState() {
+        if (irState) {
+            return;
+        }
+
+        irState = {
+            protocol: undefined,
+            bitsReceived: 0,
+            hasNewDatagram: false,
+            addressSectionBits: 0,
+            commandSectionBits: 0,
+            hiword: 0, // TODO replace with uint32
+            loword: 0,
+            activeCommand: -1,
+            repeatTimeout: 0,
+            onIrButtonPressed: [],
+            onIrButtonReleased: [],
+            onIrDatagram: undefined,
+        };
+    }
+    ///////////////////////
 
     let _initEvents = true
     /**
