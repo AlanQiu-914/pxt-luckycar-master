@@ -381,6 +381,54 @@ namespace luckycar {
         };
     }
     ///////////////////////
+    /**
+    * Connects to the IR receiver module at the specified pin and configures the IR protocol.
+    * @param pin IR receiver pin, eg: DigitalPin.P0
+    * @param protocol IR protocol, eg: IrProtocol.Keyestudio
+    */
+    //% subcategory="IR Receiver"
+    //% blockId="luckycar_infrared_connect_receiver"
+    //% block="connect IR receiver at pin %pin and decode %protocol"
+    //% pin.fieldEditor="gridpicker"
+    //% pin.fieldOptions.columns=4
+    //% pin.fieldOptions.tooltips="false"
+    //% weight=90
+    export function connectIrReceiver(
+        pin: DigitalPin,
+        protocol: IrProtocol
+    ): void {
+        initIrState();
+
+        if (irState.protocol) {
+            return;
+        }
+
+        irState.protocol = protocol;
+
+        enableIrMarkSpaceDetection(pin);
+
+        background.schedule(notifyIrEvents, background.Thread.Priority, background.Mode.Repeat, REPEAT_TIMEOUT_MS);
+    }
+
+    function notifyIrEvents() {
+        if (irState.activeCommand === -1) {
+            // skip to save CPU cylces
+        } else {
+            const now = input.runningTime();
+            if (now > irState.repeatTimeout) {
+                // repeat timed out
+
+                const handler = irState.onIrButtonReleased.find(h => h.irButton === irState.activeCommand || IrButton.Any === h.irButton);
+                if (handler) {
+                    background.schedule(handler.onEvent, background.Thread.UserCallback, background.Mode.Once, 0);
+                }
+
+                irState.bitsReceived = 0;
+                irState.activeCommand = -1;
+            }
+        }
+    }
+    /////////////////////
 
     let _initEvents = true
     /**
