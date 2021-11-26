@@ -45,8 +45,6 @@ const enum IrButton {
 }
 */
 const enum IrButton {
-    //% block="any"
-    Any = -1,
     //% block="A"
     A_key = 0xA2,
     //% block="▲"
@@ -394,13 +392,13 @@ namespace luckycar {
             if (newCommand !== irState.activeCommand) {
 
                 if (irState.activeCommand >= 0) {
-                    const releasedHandler = irState.onIrButtonReleased.find(h => h.irButton === irState.activeCommand || IrButton.Any === h.irButton);
+                    const releasedHandler = irState.onIrButtonReleased.find(h => h.irButton === irState.activeCommand || IrButton.A_key === h.irButton);
                     if (releasedHandler) {
                         background.schedule(releasedHandler.onEvent, background.Thread.UserCallback, background.Mode.Once, 0);
                     }
                 }
 
-                const pressedHandler = irState.onIrButtonPressed.find(h => h.irButton === newCommand || IrButton.Any === h.irButton);
+                const pressedHandler = irState.onIrButtonPressed.find(h => h.irButton === newCommand || IrButton.A_key === h.irButton);
                 if (pressedHandler) {
                     background.schedule(pressedHandler.onEvent, background.Thread.UserCallback, background.Mode.Once, 0);
                 }
@@ -468,7 +466,7 @@ namespace luckycar {
             if (now > irState.repeatTimeout) {
                 // repeat timed out
 
-                const handler = irState.onIrButtonReleased.find(h => h.irButton === irState.activeCommand || IrButton.Any === h.irButton);
+                const handler = irState.onIrButtonReleased.find(h => h.irButton === irState.activeCommand || IrButton.A_key === h.irButton);
                 if (handler) {
                     background.schedule(handler.onEvent, background.Thread.UserCallback, background.Mode.Once, 0);
                 }
@@ -514,7 +512,7 @@ namespace luckycar {
     export function irButton(): number {
         basic.pause(0); // Yield to support background processing when called in tight loops
         if (!irState) {
-            return IrButton.Any;
+            return IrButton.A_key;
         }
         return irState.commandSectionBits >> 8;
     }
