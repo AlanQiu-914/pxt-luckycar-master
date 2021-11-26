@@ -59,7 +59,7 @@ const enum IrButton {
     E_key = 0xC2,
     //% block="◀"
     Left = 0xE0,
-    //% block="OK"
+    //% block="⚙"
     Ok = 0xA8,
     //% block="▶"
     Right = 0x90,
