@@ -1,49 +1,3 @@
-/*
-const enum IrButton {
-    //% block="any"
-    Any = -1,
-    //% block="▲"
-    Up = 0x62,
-    //% block=" "
-    Unused_2 = -2,
-    //% block="◀"
-    Left = 0x22,
-    //% block="⚙"
-    Ok = 0x02,
-    //% block="▶"
-    Right = 0xc2,
-    //% block=" "
-    Unused_3 = -3,
-    //% block="▼"
-    Down = 0xa8,
-    //% block=" "
-    Unused_4 = -4,
-    //% block="1"
-    Number_1 = 0x68,
-    //% block="2"
-    Number_2 = 0x98,
-    //% block="3"
-    Number_3 = 0xb0,
-    //% block="4"
-    Number_4 = 0x30,
-    //% block="5"
-    Number_5 = 0x18,
-    //% block="6"
-    Number_6 = 0x7a,
-    //% block="7"
-    Number_7 = 0x10,
-    //% block="8"
-    Number_8 = 0x38,
-    //% block="9"
-    Number_9 = 0x5a,
-    //% block="*"
-    Star = 0x42,
-    //% block="0"
-    Number_0 = 0x4a,
-    //% block="#"
-    Hash = 0x52,
-}
-*/
 const enum IrButton {
     //% block="A"
     A_key = 0xA2,
@@ -88,27 +42,18 @@ const enum IrButton {
     //% block="9"
     Number_9 = 0x52,
 }
-
 const enum IrButtonAction {
     //% block="pressed"
     Pressed = 0,
     //% block="released"
     Released = 1,
 }
-
 const enum IrProtocol {
     //% block="Keyestudio"
     Keyestudio = 0,
     //% block="NEC"
     NEC = 1,
 }
-
-
-
-/**
- * Functions to luckycar by DeeJoin Co.,Ltd.
- */
-//% weight=500 color=#FF0000  icon="\uf1b9" 
 namespace luckycar {
     /**
      * IR receiver
@@ -170,8 +115,8 @@ namespace luckycar {
                     // Cancel jobs
                     this._jobsToRemove.forEach(function (jobId: number, index: number) {
                         for (let i = _jobs.length - 1; i >= 0; i--) {
-                            const job = _jobs[i];
-                            if (job.id == jobId) {
+                            const job2 = _jobs[i];
+                            if (job2.id == jobId) {
                                 _jobs.removeAt(i);
                                 break;
                             }
@@ -183,16 +128,16 @@ namespace luckycar {
                     // Execute all jobs
                     if (this._type === Thread.Priority) {
                         // newest first
-                        for (let i = _jobs.length - 1; i >= 0; i--) {
-                            if (_jobs[i].run(delta)) {
-                                this._jobsToRemove.push(_jobs[i].id)
+                        for (let j = _jobs.length - 1; j >= 0; j--) {
+                            if (_jobs[j].run(delta)) {
+                                this._jobsToRemove.push(_jobs[j].id)
                             }
                         }
                     } else {
                         // Execute in order of schedule
-                        for (let i = 0; i < _jobs.length; i++) {
-                            if (_jobs[i].run(delta)) {
-                                this._jobsToRemove.push(_jobs[i].id)
+                        for (let k = 0; k < _jobs.length; k++) {
+                            if (_jobs[k].run(delta)) {
+                                this._jobsToRemove.push(_jobs[k].id)
                             }
                         }
                     }
@@ -462,8 +407,8 @@ namespace luckycar {
         if (irState.activeCommand === -1) {
             // skip to save CPU cylces
         } else {
-            const now = input.runningTime();
-            if (now > irState.repeatTimeout) {
+            const now2 = input.runningTime();
+            if (now2 > irState.repeatTimeout) {
                 // repeat timed out
 
                 const handler = irState.onIrButtonReleased.find(h => h.irButton === irState.activeCommand || IrButton.A_key === h.irButton);
