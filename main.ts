@@ -618,8 +618,7 @@ namespace luckycar {
         //% subcategory="RGB_ctr"
         //% blockId=luckycar_set_strip_color
         //% block="%strip|show color %rgb=neopixel_colors"
-        //% strip.defl=strip
-        //% weight=85 blockGap=8
+        //% weight=80
         showColor(rgb: number) {
             rgb = rgb >> 0;
             this.setAllRGB(rgb);
