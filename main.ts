@@ -578,6 +578,88 @@ namespace luckycar {
         }
         return hex;
     }
+    /**
+     * RGB灯
+     */
+    export function colors(color: NeoPixelColors): number {
+        return color;
+    }
+
+    function packRGB(a: number, b: number, c: number): number {
+        return ((a & 0xFF) << 16) | ((b & 0xFF) << 8) | (c & 0xFF);
+    }
+    function unpackR(rgb: number): number {
+        let r = (rgb >> 16) & 0xFF;
+        return r;
+    }
+    function unpackG(rgb: number): number {
+        let g = (rgb >> 8) & 0xFF;
+        return g;
+    }
+    function unpackB(rgb: number): number {
+        let b = (rgb) & 0xFF;
+        return b;
+    }
+
+    export class Strip {
+        buf: Buffer;
+        pin: DigitalPin;
+        // TODO: encode as bytes instead of 32bit
+        brightness: number;
+        start: number; // start offset in LED strip
+        _length: number; // number of LEDs
+        _mode: NeoPixelMode;
+        _matrixWidth: number; // number of leds in a matrix - if any
+
+        /**
+         * Shows all LEDs to a given color (range 0-255 for r, g, b).
+         * @param rgb RGB color of the LED
+         */
+        //% subcategory="RGB_ctr"
+        //% blockId=luckycar_set_strip_color
+        //% block="%strip|show color %rgb=neopixel_colors"
+        //% strip.defl=strip
+        //% weight=85 blockGap=8
+        showColor(rgb: number) {
+            rgb = rgb >> 0;
+            this.setAllRGB(rgb);
+            this.show();
+        }
+        private setBufferRGB(offset: number, red: number, green: number, blue: number): void {
+            if (this._mode === NeoPixelMode.RGB_RGB) {
+                this.buf[offset + 0] = red;
+                this.buf[offset + 1] = green;
+            } else {
+                this.buf[offset + 0] = green;
+                this.buf[offset + 1] = red;
+            }
+            this.buf[offset + 2] = blue;
+        }
+        private setAllRGB(rgb: number) {
+            let red = unpackR(rgb);
+            let green = unpackG(rgb);
+            let blue = unpackB(rgb);
+
+            const br = this.brightness;
+            if (br < 255) {
+                red = (red * br) >> 8;
+                green = (green * br) >> 8;
+                blue = (blue * br) >> 8;
+            }
+            const end = this.start + this._length;
+            const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+            for (let i = this.start; i < end; ++i) {
+                this.setBufferRGB(i * stride, red, green, blue)
+            }
+        }
+        show() {
+            // only supported in beta
+            // ws2812b.setBufferMode(this.pin, this._mode);
+            ws2812b.sendBuffer(this.buf, this.pin);
+        }
+    }
+
+
 
     /**
      * 小车马达、循迹控制
