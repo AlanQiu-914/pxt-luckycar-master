@@ -611,19 +611,6 @@ namespace luckycar {
         _mode: NeoPixelMode;
         _matrixWidth: number; // number of leds in a matrix - if any
 
-        /**
-         * Shows all LEDs to a given color (range 0-255 for r, g, b).
-         * @param rgb RGB color of the LED
-         */
-        //% subcategory="RGB_ctr"
-        //% blockId=luckycar_set_strip_color
-        //% block="%strip|show color %rgb=neopixel_colors"
-        //% weight=80
-        showColor(rgb: number) {
-            rgb = rgb >> 0;
-            this.setAllRGB(rgb);
-            this.show();
-        }
         private setBufferRGB(offset: number, red: number, green: number, blue: number): void {
             if (this._mode === NeoPixelMode.RGB_RGB) {
                 this.buf[offset + 0] = red;
@@ -634,7 +621,7 @@ namespace luckycar {
             }
             this.buf[offset + 2] = blue;
         }
-        private setAllRGB(rgb: number) {
+        public  setAllRGB(rgb: number){
             let red = unpackR(rgb);
             let green = unpackG(rgb);
             let blue = unpackB(rgb);
@@ -651,14 +638,26 @@ namespace luckycar {
                 this.setBufferRGB(i * stride, red, green, blue)
             }
         }
-        show() {
+        public show() {
             // only supported in beta
             // ws2812b.setBufferMode(this.pin, this._mode);
             ws2812b.sendBuffer(this.buf, this.pin);
         }
     }
-
-
+    let myStrip: Strip;
+    /**
+        * Shows all LEDs to a given color (range 0-255 for r, g, b).
+        * @param rgb RGB color of the LED
+        */
+    //% subcategory="RGB_ctr"
+    //% blockId=luckycar_set_strip_color
+    //% block="%strip|show color %rgb=neopixel_colors"
+    //% weight=80
+    export function showColor(rgb: number): void {
+        rgb = rgb >> 0;
+        myStrip.setAllRGB(rgb);
+        myStrip.show();
+    }
 
     /**
      * 小车马达、循迹控制
