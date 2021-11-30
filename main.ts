@@ -652,7 +652,6 @@ namespace luckycar {
     //% subcategory="RGB_ctr"
     //% blockId=luckycar_set_strip_color
     //% block="%strip|show color %rgb=neopixel_colors"
-    //% strip.defl=strip
     //% weight=80
     export function showColor(rgb: number): void {
         rgb = rgb >> 0;
