@@ -1072,7 +1072,7 @@ namespace luckycar {
         //% weight=100 blockGap=8
         //% parts="neopixel"
         export function car_rgb_init(): void {
-            let stride = NeoPixelMode.RGB;
+            let stride = 3;
             carstrip.buf = pins.createBuffer(4 * stride);
             carstrip.start = 0;
             carstrip._length = 4;
