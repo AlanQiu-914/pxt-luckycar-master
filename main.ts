@@ -583,7 +583,6 @@ namespace luckycar {
      */
     //% weight=2 blockGap=8
     //% blockId="neopixel_colors" block="%color"
-    //% advanced=true
     export function colors(color: NeoPixelColors): number {
         return color;
     }
