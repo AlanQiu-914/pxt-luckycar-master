@@ -1063,6 +1063,27 @@ namespace luckycar {
             strip.setPin(pin)
             return strip;
         }
+        /**
+         * rgb init DigitalPin.P0, 4 leds,NeoPixelMode.RGB
+         */
+        //% subcategory="RGB_CTR"
+        //% blockId="neopixel_rgbinit" block="NeoPixel rgb init"
+        //% weight=100 blockGap=8
+        //% parts="neopixel"
+        //% blockSetVariable=strip
+        export function rgbinit(): Strip {
+            let strip = new Strip();
+            let stride = NeoPixelMode.RGB;
+            strip.buf = pins.createBuffer(4 * stride);
+            strip.start = 0;
+            strip._length = 4;
+            strip._mode = NeoPixelMode.RGB || NeoPixelMode.RGB;
+            strip._matrixWidth = 0;
+            strip.setBrightness(128)
+            strip.setPin(DigitalPin.P0)
+            return strip;
+        }
+
 
         /**
          * Converts red, green, blue channels into a RGB color
