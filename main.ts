@@ -1066,24 +1066,39 @@ namespace luckycar {
         /**
          * rgb init DigitalPin.P0, 4 leds,NeoPixelMode.RGB
          */
+        let carstrip = new Strip();
         //% subcategory="RGB_CTR"
-        //% blockId="neopixel_rgbinit" block="NeoPixel rgb init"
+        //% blockId="neopixel_car_rgb_init" block="Car Rgb Init"
         //% weight=100 blockGap=8
         //% parts="neopixel"
-        //% blockSetVariable=strip
-        export function rgbinit(): Strip {
-            let strip = new Strip();
+        export function car_rgb_init(): void {
             let stride = NeoPixelMode.RGB;
-            strip.buf = pins.createBuffer(4 * stride);
-            strip.start = 0;
-            strip._length = 4;
-            strip._mode = NeoPixelMode.RGB || NeoPixelMode.RGB;
-            strip._matrixWidth = 0;
-            strip.setBrightness(128)
-            strip.setPin(DigitalPin.P0)
-            return strip;
+            carstrip.buf = pins.createBuffer(4 * stride);
+            carstrip.start = 0;
+            carstrip._length = 4;
+            carstrip._mode = NeoPixelMode.RGB || NeoPixelMode.RGB;
+            carstrip._matrixWidth = 0;
+            carstrip.setBrightness(128)
+            carstrip.setPin(DigitalPin.P0)
         }
 
+        //% subcategory="RGB_CTR"
+        //% blockId="neopixel_set_car_pixel_color" block="set car pixel color at %pixeloffset|to %rgb=neopixel_colors"
+        //% blockGap=8
+        //% weight=80
+        //% parts="neopixel" advanced=true
+        export function setCarPixelColor(pixeloffset: number, rgb: number): void {
+            carstrip.setPixelColor(pixeloffset >> 0, rgb >> 0);
+        }
+
+        //% subcategory="RGB_CTR"
+        //% blockId="neopixel_set_car_all_rgb" block="car rgb show color %rgb=neopixel_colors"
+        //% blockGap=8
+        //% weight=80
+        //% parts="neopixel" advanced=true
+        export function setCarRgbAll(rgb: number): void {
+            carstrip.showColor(rgb >> 0);
+        }
 
         /**
          * Converts red, green, blue channels into a RGB color
