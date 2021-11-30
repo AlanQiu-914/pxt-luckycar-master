@@ -581,7 +581,6 @@ namespace luckycar {
     /**
      * RGB灯
      */
-    //% blockId="neopixel_colors"
     export function colors(color: NeoPixelColors): number {
         return color;
     }
