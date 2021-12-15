@@ -1241,7 +1241,7 @@ namespace luckycar {
     export enum TrackPins {
         //% block="Center_Left"
         Center_Left = DAL.MICROBIT_ID_IO_P11,
-        //% block="Center_Left"
+        //% block="Center_Right"
         Center_Right = DAL.MICROBIT_ID_IO_P15,
         //% block="Side_Left"
         Side_Left = DAL.MICROBIT_ID_IO_P6,
