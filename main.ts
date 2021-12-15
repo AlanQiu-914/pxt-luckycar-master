@@ -1240,13 +1240,13 @@ namespace luckycar {
      */
     export enum TrackPins {
         //% block="Center_Left"
-        Center_Left = DAL.MICROBIT_ID_IO_P11,
+        Center_Left = DAL.MICROBIT_ID_IO_P15,
         //% block="Center_Right"
-        Center_Right = DAL.MICROBIT_ID_IO_P15,
+        Center_Right = DAL.MICROBIT_ID_IO_P11,
         //% block="Side_Left"
-        Side_Left = DAL.MICROBIT_ID_IO_P6,
+        Side_Left = DAL.MICROBIT_ID_IO_P7,
         //% block="Side_Right"
-        Side_Right = DAL.MICROBIT_ID_IO_P7
+        Side_Right = DAL.MICROBIT_ID_IO_P6
     }
     /**
     * Line Sensor events    MICROBIT_PIN_EVT_RISE
@@ -1429,10 +1429,10 @@ namespace luckycar {
     //% blockId=ringbitcar_center_tracking block="Center tracking state is %state"
     //% weight=65
     export function centertracking(state: CenterTrackingState): boolean {
-        pins.setPull(DigitalPin.P11, PinPullMode.PullNone)
-        pins.setPull(DigitalPin.P15, PinPullMode.PullNone)
-        let center_left_tracking = pins.digitalReadPin(DigitalPin.P11);
-        let center_right_tracking = pins.digitalReadPin(DigitalPin.P15);
+        pins.setPull(DigitalPin.P11, PinPullMode.PullUp)
+        pins.setPull(DigitalPin.P15, PinPullMode.PullUp)
+        let center_right_tracking = pins.digitalReadPin(DigitalPin.P11);
+        let center_left_tracking = pins.digitalReadPin(DigitalPin.P15);
         if (center_left_tracking == 0 && center_right_tracking == 0 && state == 0) {
             return true;
         }
@@ -1459,14 +1459,14 @@ namespace luckycar {
     //% side.fieldEditor="gridpicker" side.fieldOptions.columns=2
     //% weight=60
     export function trackstate(side: TrackPins, state: TrackEvents): boolean {
-        pins.setPull(DigitalPin.P11, PinPullMode.PullNone);
-        pins.setPull(DigitalPin.P15, PinPullMode.PullNone);
-        pins.setPull(DigitalPin.P6, PinPullMode.PullNone);
-        pins.setPull(DigitalPin.P7, PinPullMode.PullNone);
-        let center_left_tracking = pins.digitalReadPin(DigitalPin.P11);
-        let center_right_tracking = pins.digitalReadPin(DigitalPin.P15);
-        let side_left_tracking = pins.digitalReadPin(DigitalPin.P6);
-        let side_right_tracking = pins.digitalReadPin(DigitalPin.P7);
+        pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
+        let center_right_tracking = pins.digitalReadPin(DigitalPin.P11);
+        let center_left_tracking = pins.digitalReadPin(DigitalPin.P15);
+        let side_right_tracking = pins.digitalReadPin(DigitalPin.P6);
+        let side_left_tracking = pins.digitalReadPin(DigitalPin.P7);
         if (side == 0 && state == 1 && center_left_tracking == 1) {
             return true;
         }
@@ -1503,10 +1503,10 @@ namespace luckycar {
     //% blockId=ringbitcar_side_tracking block="Side tracking state is %state"
     //% weight=60
     export function sidetracking(state: SideTrackingState): boolean {
-        pins.setPull(DigitalPin.P6, PinPullMode.PullNone)
-        pins.setPull(DigitalPin.P7, PinPullMode.PullNone)
-        let side_left_tracking = pins.digitalReadPin(DigitalPin.P6);
-        let side_right_tracking = pins.digitalReadPin(DigitalPin.P7);
+        pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
+        let side_right_tracking = pins.digitalReadPin(DigitalPin.P6);
+        let side_left_tracking = pins.digitalReadPin(DigitalPin.P7);
         if (side_left_tracking == 0 && side_right_tracking == 0 && state == 0) {
             return true;
         }
