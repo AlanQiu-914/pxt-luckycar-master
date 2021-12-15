@@ -1228,6 +1228,13 @@ namespace luckycar {
         //% block="Right" enumval=3
         right
     }
+
+    export enum BrightnessChoice {
+        //% block="Left" enumval=0
+        Left,
+        //% block="Right" enumval=1
+        Right
+    }
     /**
      * Pins used to generate events
      */
@@ -1496,6 +1503,19 @@ namespace luckycar {
         return RangeInCentimeters;
     }
 
+    /**
+    * Cars read brightness on Left and right
+    */
+    //% blockId=brightness block="%num Brightness value"
+    //% weight=55
+    export function brightness(num: BrightnessChoice): number {
+        let mesuBrightness = 0;
+        if(num == 0)
+            mesuBrightness = pins.analogReadPin(AnalogPin.P3);
+        else if(num == 1)
+            mesuBrightness = pins.analogReadPin(AnalogPin.P10);
+        return mesuBrightness;
+    }
     /**
     * TODO: Runs when line sensor finds or loses.
     */
