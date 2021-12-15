@@ -1258,6 +1258,16 @@ namespace luckycar {
         LoseLine = DAL.MICROBIT_PIN_EVT_RISE
     }
 
+    /**
+    * Line Sensor state    
+    */
+    export enum TrackState {
+        //% block="Found" 
+        FindLine = 0,
+        //% block="Lost" 
+        LoseLine = 1
+    }
+
 
     /**
     * Status List of Center Tracking Modules
@@ -1452,13 +1462,13 @@ namespace luckycar {
     /**
     * TODO: track one side
     * @param side Line sensor edge , eg: CenterTrackPins.Left
-    * @param state Line sensor status, eg: CenterTrackEvents.FindLine
+    * @param state Line sensor status, eg: TrackState.FindLine
     */
     //% block="Track %side line sensor %state"
     //% state.fieldEditor="gridpicker" state.fieldOptions.columns=2
     //% side.fieldEditor="gridpicker" side.fieldOptions.columns=2
     //% weight=60
-    export function trackstate(side: TrackPins, state: TrackEvents): boolean {
+    export function trackstate(side: TrackPins, state: TrackState): boolean {
         pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
         pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
         pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
