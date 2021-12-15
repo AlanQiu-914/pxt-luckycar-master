@@ -1257,7 +1257,19 @@ namespace luckycar {
         //% block="Lost" 
         LoseLine = DAL.MICROBIT_PIN_EVT_RISE
     }
-
+    /**
+     * Pins used to generate events
+     */
+    export enum TrackPinsNum {
+        //% block="Center_Left"
+        Center_Left = 0,
+        //% block="Center_Right"
+        Center_Right = 1,
+        //% block="Side_Left"
+        Side_Left = 2,
+        //% block="Side_Right"
+        Side_Right = 3
+    }
     /**
     * Line Sensor state    
     */
@@ -1468,7 +1480,7 @@ namespace luckycar {
     //% state.fieldEditor="gridpicker" state.fieldOptions.columns=2
     //% side.fieldEditor="gridpicker" side.fieldOptions.columns=2
     //% weight=60
-    export function trackstate(side: TrackPins, state: TrackState): boolean {
+    export function trackstatefun(side: TrackPinsNum, state: TrackState): boolean {
         pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
         pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
         pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
