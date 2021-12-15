@@ -1468,30 +1468,32 @@ namespace luckycar {
         }
     }
 
+    let distanceBackup: number = 0;
     /**
     * Cars can extend the ultrasonic function to prevent collisions and other functions.. 
     * @param Sonarunit two states of ultrasonic module, eg: Centimeters
     */
-    //% blockId=ultrasonic block="HC-SR04 Sonar unit %unit"
+    //% blockId=ultrasonic block="HC-SR04 Sonar"
     //% weight=55
-    export function ultrasonic(unit: SonarUnit, maxCmDistance = 500): number {
-        // send pulse
-        pins.setPull(DigitalPin.P14, PinPullMode.PullNone);
-        pins.digitalWritePin(DigitalPin.P14, 0);
+    export function ultrasonic(): number {
+        let duration = 0;
+        let RangeInCentimeters = 0;
+        
+        pins.digitalWritePin(14, 0);
         control.waitMicros(2);
-        pins.digitalWritePin(DigitalPin.P14, 1);
-        control.waitMicros(10);
-        pins.digitalWritePin(DigitalPin.P14, 0);
-        // read pulse
-        const d = pins.pulseIn(DigitalPin.P13, PulseValue.High, maxCmDistance * 50);
-        switch (unit) {
-            case SonarUnit.Centimeters:
-                return Math.floor(d * 9 / 6 / 58);
-            case SonarUnit.Inches:
-                return Math.floor(d * 9 / 6 / 148);
-            default:
-                return d;
-        }
+        pins.digitalWritePin(14, 1);
+        control.waitMicros(20);
+        pins.digitalWritePin(14, 0);        
+        duration = pins.pulseIn(14, PulseValue.High, 50000); // Max duration 50 ms
+
+        RangeInCentimeters = duration * 153 / 44 / 2 / 100 ;
+               
+        if(RangeInCentimeters > 0) distanceBackup = RangeInCentimeters;
+        else RangeInCentimeters = distanceBackup;
+
+        basic.pause(50);
+        
+        return RangeInCentimeters;
     }
 
     /**
