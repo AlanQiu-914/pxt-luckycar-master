@@ -1516,7 +1516,7 @@ namespace luckycar {
         else if (side_left_tracking == 0 && side_right_tracking == 1 && state == 2) {
             return true;
         }
-        else if (side_left_tracking == 1 && side_left_tracking == 1 && state == 3) {
+        else if (side_left_tracking == 1 && side_right_tracking == 1 && state == 3) {
             return true;
         }
         else {
