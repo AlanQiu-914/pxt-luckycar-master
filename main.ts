@@ -1442,7 +1442,7 @@ namespace luckycar {
         else if (center_left_tracking == 0 && center_right_tracking == 1 && state == 2) {
             return true;
         }
-        else if (center_left_tracking == 1 && center_left_tracking == 1 && state == 3) {
+        else if (center_left_tracking == 1 && center_right_tracking == 1 && state == 3) {
             return true;
         }
         else {
