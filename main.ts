@@ -1479,12 +1479,12 @@ namespace luckycar {
         let duration = 0;
         let RangeInCentimeters = 0;
         
-        pins.digitalWritePin(14, 0);
+        pins.digitalWritePin(DigitalPin.P14, 0);
         control.waitMicros(2);
-        pins.digitalWritePin(14, 1);
+        pins.digitalWritePin(DigitalPin.P14, 1);
         control.waitMicros(20);
-        pins.digitalWritePin(14, 0);        
-        duration = pins.pulseIn(14, PulseValue.High, 50000); // Max duration 50 ms
+        pins.digitalWritePin(DigitalPin.P14, 0);
+        duration = pins.pulseIn(DigitalPin.P14, PulseValue.High, 50000); // Max duration 50 ms
 
         RangeInCentimeters = duration * 153 / 44 / 2 / 100 ;
                
