@@ -1429,8 +1429,8 @@ namespace luckycar {
     //% blockId=ringbitcar_center_tracking block="Center tracking state is %state"
     //% weight=65
     export function centertracking(state: CenterTrackingState): boolean {
-        pins.setPull(DigitalPin.P11, PinPullMode.PullUp)
-        pins.setPull(DigitalPin.P15, PinPullMode.PullUp)
+        pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
         let center_right_tracking = pins.digitalReadPin(DigitalPin.P11);
         let center_left_tracking = pins.digitalReadPin(DigitalPin.P15);
         if (center_left_tracking == 0 && center_right_tracking == 0 && state == 0) {
