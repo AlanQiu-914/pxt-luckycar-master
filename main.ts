@@ -1243,7 +1243,7 @@ namespace luckycar {
         //% block="Center_Left"
         Center_Left = EventBusSource.MICROBIT_ID_IO_P15,
         //% block="Center_Right"
-        Center_Right = EventBusSource.MICROBIT_ID_IO_P11,
+        Center_Right = EventBusSource.MICROBIT_ID_IO_P11
     }
 
     /**
