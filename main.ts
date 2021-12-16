@@ -1614,8 +1614,8 @@ namespace luckycar {
     //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     //% weight=50
     export function trackEventSide(sensor: SideTrackPins, event: TrackEvents, handler: Action) {
-        initEvents_side();
-        //control.onEvent(<number>sensor, <number>event, handler);
+        //initEvents_side();
+        control.onEvent(<number>sensor, <number>event, handler);
     }
 
     /**
