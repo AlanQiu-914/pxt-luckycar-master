@@ -1652,10 +1652,10 @@ namespace luckycar {
 
     function initEvents_side(): void {
         if (_initEvents_side) {
-            //pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
+            pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
             pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
 
-           // pins.setEvents(DigitalPin.P6, PinEventType.Edge);
+            pins.setEvents(DigitalPin.P6, PinEventType.Edge);
             pins.setEvents(DigitalPin.P7, PinEventType.Edge);
             _initEvents_side = false;
         }
