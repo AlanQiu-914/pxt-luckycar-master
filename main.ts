@@ -617,11 +617,11 @@ namespace luckycar {
              * Shows all LEDs to a given color (range 0-255 for r, g, b).
              * @param rgb RGB color of the LED
              */
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_set_strip_color" block="%strip|show color %rgb=neopixel_colors"
-            //% strip.defl=strip
-            //% weight=85 blockGap=8
-            //% parts="neopixel"
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_set_strip_color" block="%strip|show color %rgb=neopixel_colors"
+            // strip.defl=strip
+            // weight=85 blockGap=8
+            // parts="neopixel"
             showColor(rgb: number) {
                 rgb = rgb >> 0;
                 this.setAllRGB(rgb);
