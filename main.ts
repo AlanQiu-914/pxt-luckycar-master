@@ -1241,9 +1241,9 @@ namespace luckycar {
      */
     export enum CenterTrackPins {
         //% block="Center_Left"
-        Center_Left = DAL.MICROBIT_ID_IO_P15,
+        Center_Left = EventBusSource.MICROBIT_ID_IO_P15,
         //% block="Center_Right"
-        Center_Right = DAL.MICROBIT_ID_IO_P11,
+        Center_Right = EventBusSource.MICROBIT_ID_IO_P11,
     }
 
     /**
@@ -1251,18 +1251,18 @@ namespace luckycar {
      */
     export enum SideTrackPins {
         //% block="Side_Left"
-        Side_Left = DAL.MICROBIT_ID_IO_P7,
+        Side_Left = EventBusSource.MICROBIT_ID_IO_P7,
         //% block="Side_Right"
-        Side_Right = DAL.MICROBIT_ID_IO_P6
+        Side_Right = EventBusSource.MICROBIT_ID_IO_P6
     }
     /**
     * Line Sensor events    MICROBIT_PIN_EVT_RISE
     */
     export enum TrackEvents {
         //% block="Found" 
-        FindLine = DAL.MICROBIT_PIN_EVT_FALL,
+        FindLine = EventBusValue.MICROBIT_PIN_EVT_FALL,
         //% block="Lost" 
-        LoseLine = DAL.MICROBIT_PIN_EVT_RISE
+        LoseLine = EventBusValue.MICROBIT_PIN_EVT_RISE
     }
     /**
      * Pins used to generate events
