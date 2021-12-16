@@ -1589,10 +1589,10 @@ namespace luckycar {
     }
     /**
     * TODO: Runs when line sensor finds or loses.
-    *sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
-    *event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     */
     //% block="On %sensor| line %event"
+    //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
+    //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     //% weight=50
     export function trackEvent(sensor: TrackPins, event: TrackEvents, handler: Action) {
         initEvents();
@@ -1627,10 +1627,10 @@ namespace luckycar {
             pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
             pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
 
-            pins.setEvents(DigitalPin.P11, PinEventType.Edge);
-            pins.setEvents(DigitalPin.P15, PinEventType.Edge);
             pins.setEvents(DigitalPin.P6, PinEventType.Edge);
             pins.setEvents(DigitalPin.P7, PinEventType.Edge);
+            pins.setEvents(DigitalPin.P11, PinEventType.Edge);
+            pins.setEvents(DigitalPin.P15, PinEventType.Edge);
             _initEvents = false;
         }
     }
