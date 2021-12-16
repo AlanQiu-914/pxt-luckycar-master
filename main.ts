@@ -812,11 +812,11 @@ namespace luckycar {
             /**
              * Send all the changes to the strip.
              */
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_show" block="%strip|show" blockGap=8
-            //% strip.defl=strip
-            //% weight=79
-            //% parts="neopixel"
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_show" block="%strip|show" blockGap=8
+            // strip.defl=strip
+            // weight=79
+            // parts="neopixel"
             show() {
                 // only supported in beta
                 // ws2812b.setBufferMode(this.pin, this._mode);
@@ -827,11 +827,11 @@ namespace luckycar {
              * Turn off all LEDs.
              * You need to call ``show`` to make the changes visible.
              */
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_clear" block="%strip|clear"
-            //% strip.defl=strip
-            //% weight=76
-            //% parts="neopixel"
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_clear" block="%strip|clear"
+            // strip.defl=strip
+            // weight=76
+            // parts="neopixel"
             clear(): void {
                 const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
                 this.buf.fill(0, this.start * stride, this._length * stride);
