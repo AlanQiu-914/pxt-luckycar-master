@@ -633,11 +633,12 @@ namespace luckycar {
              * @param startHue the start hue value for the rainbow, eg: 1
              * @param endHue the end hue value for the rainbow, eg: 360
              */
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_set_strip_rainbow" block="%strip|show rainbow from %startHue|to %endHue"
-            //% strip.defl=strip
-            //% weight=85 blockGap=8
-            //% parts="neopixel"
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_set_strip_rainbow" block="%strip|show rainbow from %startHue|to %endHue"
+            // strip.defl=strip
+            // weight=85 blockGap=8
+            // parts="neopixel"
+            /*
             showRainbow(startHue: number = 1, endHue: number = 360) {
                 if (this._length <= 0) return;
 
@@ -694,7 +695,7 @@ namespace luckycar {
                 }
                 this.show();
             }
-
+            */
             /**
              * Displays a vertical bar graph based on the `value` and `high` value.
              * If `high` is 0, the chart gets adjusted automatically.
