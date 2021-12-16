@@ -1077,13 +1077,13 @@ namespace luckycar {
         //% parts="neopixel"
         export function car_rgb_init(): void {
             let stride = 3;
-            carstrip.buf = pins.createBuffer(4 * stride);
+            carstrip.buf = pins.createBuffer(5 * stride);
             carstrip.start = 0;
-            carstrip._length = 4;
+            carstrip._length = 5;
             carstrip._mode = NeoPixelMode.RGB || NeoPixelMode.RGB;
             carstrip._matrixWidth = 0;
             carstrip.setBrightness(128)
-            carstrip.setPin(DigitalPin.P0)
+            carstrip.setPin(DigitalPin.P16)
         }
 
         //% subcategory="RGB_CTR"
