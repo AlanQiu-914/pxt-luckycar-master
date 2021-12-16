@@ -1110,6 +1110,20 @@ namespace luckycar {
             carstrip.show();
         }
 
+        /**
+        * Set the brightness of the car rgb. This flag only applies to future operation.
+        * @param brightness a measure of LED brightness in 0-255. eg: 255
+        */
+        //% subcategory="RGB_CTR"
+        //% blockId="neopixel_set_car_brightness" block="set car rgb brightness %brightness" 
+        //% brightness.min=0 brightness.max=255
+        //% blockGap=8
+        //% weight=80
+        //% parts="neopixel" advanced=true
+        export function setCarBrightness(brightness: number): void {
+            carstrip.brightness = brightness & 0xff;
+        }
+
         //% subcategory="RGB_CTR"
         //% blockId="neopixel_set_car_all_rgb" block="car rgb show color %rgb=neopixel_colors"
         //% blockGap=8
