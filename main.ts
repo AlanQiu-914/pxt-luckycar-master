@@ -585,6 +585,20 @@ namespace luckycar {
     /**
      * RGB灯
      */
+    export enum RgbNum {
+        //% block="left_front"
+        left_front = 4,
+        //% block="right_front"
+        right_front = 3,
+        //% block="left_dowm"
+        left_dowm = 2,
+        //% block="right_dowm"
+        right_dowm = 1,
+        //% block="front_dowm"
+        front_dowm = 0
+
+    }
+
     export namespace neopixel {
         /**
          * A NeoPixel strip
@@ -1091,7 +1105,7 @@ namespace luckycar {
         //% blockGap=8
         //% weight=80
         //% parts="neopixel" advanced=true
-        export function setCarPixelColor(pixeloffset: number, rgb: number): void {
+        export function setCarPixelColor(pixeloffset: RgbNum, rgb: number): void {
             carstrip.setPixelColor(pixeloffset >> 0, rgb >> 0);
             carstrip.show();
         }
