@@ -1614,7 +1614,7 @@ namespace luckycar {
     //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     //% weight=50
     export function trackEventSide(sensor: SideTrackPins, event: TrackEvents, handler: Action) {
-        //initEvents_side();
+        initEvents_side();
         control.onEvent(<number>sensor, <number>event, handler);
     }
 
@@ -1651,12 +1651,11 @@ namespace luckycar {
     }
 
     function initEvents_side(): void {
-        
         if (_initEvents_side) {
-            pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
+            //pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
             pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
 
-            pins.setEvents(DigitalPin.P6, PinEventType.Edge);
+           // pins.setEvents(DigitalPin.P6, PinEventType.Edge);
             pins.setEvents(DigitalPin.P7, PinEventType.Edge);
             _initEvents_side = false;
         }
