@@ -955,7 +955,7 @@ namespace luckycar {
              */
             //% subcategory="RGB_CTR"
             //% weight=10
-            //% parts="neopixel" advanced=true
+            //% parts="neopixel" 
             setPin(pin: DigitalPin): void {
                 this.pin = pin;
                 pins.digitalWritePin(this.pin, 0);
