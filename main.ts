@@ -758,16 +758,17 @@ namespace luckycar {
              * Sets the number of pixels in a matrix shaped strip
              * @param width number of pixels in a row
              */
-            //% subcategory="RGB_CTR"
-            //% blockId=neopixel_set_matrix_width block="%strip|set matrix width %width"
-            //% strip.defl=strip
-            //% blockGap=8
-            //% weight=5
-            //% parts="neopixel" advanced=true
+            // subcategory="RGB_CTR"
+            // blockId=neopixel_set_matrix_width block="%strip|set matrix width %width"
+            // strip.defl=strip
+            // blockGap=8
+            // weight=5
+            // parts="neopixel" advanced=true
+            /*
             setMatrixWidth(width: number) {
                 this._matrixWidth = Math.min(this._length, width >> 0);
             }
-
+            */
             /**
              * Set LED to a given color (range 0-255 for r, g, b) in a matrix shaped strip
              * You need to call ``show`` to make the changes visible.
@@ -775,11 +776,12 @@ namespace luckycar {
              * @param y horizontal position
              * @param rgb RGB color of the LED
              */
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_set_matrix_color" block="%strip|set matrix color at x %x|y %y|to %rgb=neopixel_colors"
-            //% strip.defl=strip
-            //% weight=4
-            //% parts="neopixel" advanced=true
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_set_matrix_color" block="%strip|set matrix color at x %x|y %y|to %rgb=neopixel_colors"
+            // strip.defl=strip
+            // weight=4
+            // parts="neopixel" advanced=true
+            /*
             setMatrixColor(x: number, y: number, rgb: number) {
                 if (this._matrixWidth <= 0) return; // not a matrix, ignore
                 x = x >> 0;
@@ -790,7 +792,7 @@ namespace luckycar {
                 let i = x + y * this._matrixWidth;
                 this.setPixelColor(i, rgb);
             }
-
+            */
             /**
              * For NeoPixels with RGB+W LEDs, set the white LED brightness. This only works for RGB+W NeoPixels.
              * @param pixeloffset position of the LED in the strip
@@ -963,10 +965,10 @@ namespace luckycar {
             /**
              * Estimates the electrical current (mA) consumed by the current light configuration.
              */
-            //% subcategory="RGB_CTR"
-            //% weight=9 blockId=neopixel_power block="%strip|power (mA)"
-            //% strip.defl=strip
-            //% advanced=true
+            // subcategory="RGB_CTR"
+            // weight=9 blockId=neopixel_power block="%strip|power (mA)"
+            // strip.defl=strip
+            // advanced=true
             power(): number {
                 const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
                 const end = this.start + this._length;
