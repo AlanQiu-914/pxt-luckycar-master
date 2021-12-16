@@ -1113,7 +1113,7 @@ namespace luckycar {
         //% blockId="neopixel_set_car_pixel_color" block="set car pixel color at %pixeloffset|to %rgb=neopixel_colors"
         //% blockGap=8
         //% weight=80
-        //% parts="neopixel" advanced=true
+        //% parts="neopixel" 
         export function setCarPixelColor(pixeloffset: RgbNum, rgb: number): void {
             carstrip.setPixelColor(pixeloffset >> 0, rgb >> 0);
             carstrip.show();
