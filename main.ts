@@ -1589,10 +1589,23 @@ namespace luckycar {
     export function brightness(num: BrightnessChoice): number {
         let mesuBrightness = 0;
         if(num == 0)
-            mesuBrightness = pins.analogReadPin(AnalogPin.P3);
+        {
+            for(let i = 0;i < 10;i++)
+            {
+                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P3);
+                basic.pause(10);
+            }
+            mesuBrightness = mesuBrightness/10;
+        }
         else if(num == 1)
-            mesuBrightness = pins.analogReadPin(AnalogPin.P10);
-        return mesuBrightness;
+        {
+            for (let i = 0; i < 10; i++) {
+                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P10);
+                basic.pause(10);
+            }
+            mesuBrightness = mesuBrightness / 10;
+        }
+        return (1024-mesuBrightness);
     }
     /**
     * TODO: Runs when line sensor finds or loses.
