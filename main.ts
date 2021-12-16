@@ -420,24 +420,21 @@ namespace luckycar {
     */
     //% subcategory="IR Receiver"
     //% blockId="luckycar_infrared_connect_receiver"
-    //% block="connect IR receiver at pin %pin and decode %protocol"
+    //% block="connect IR receiver at pin P2"
     //% pin.fieldEditor="gridpicker"
     //% pin.fieldOptions.columns=4
     //% pin.fieldOptions.tooltips="false"
     //% weight=90
-    export function connectIrReceiver(
-        pin: DigitalPin,
-        protocol: IrProtocol
-    ): void {
+    export function connectIrReceiver(): void {
         initIrState();
 
         if (irState.protocol) {
             return;
         }
 
-        irState.protocol = protocol;
+        irState.protocol = IrProtocol.Keyestudio;
 
-        enableIrMarkSpaceDetection(pin);
+        enableIrMarkSpaceDetection(DigitalPin.P2);
 
         background.schedule(notifyIrEvents, background.Thread.Priority, background.Mode.Repeat, REPEAT_TIMEOUT_MS);
     }
@@ -486,13 +483,15 @@ namespace luckycar {
             irState.onIrButtonReleased.push(new IrButtonHandler(button, handler));
         }
     }
+    
     /**
        * Returns the code of the IR button that was pressed last. Returns -1 (IrButton.Any) if no button has been pressed yet.
        */
-    //% subcategory="IR Receiver"
-    //% blockId=luckycar_infrared_ir_button_pressed
-    //% block="IR button"
-    //% weight=70
+    // subcategory="IR Receiver"
+    // blockId=luckycar_infrared_ir_button_pressed
+    // block="IR button"
+    // weight=70
+    /*
     export function irButton(): number {
         basic.pause(0); // Yield to support background processing when called in tight loops
         if (!irState) {
@@ -500,28 +499,30 @@ namespace luckycar {
         }
         return irState.commandSectionBits >> 8;
     }
-
+    */
     /**
      * Do something when an IR datagram is received.
      * @param handler body code to run when the event is raised
      */
-    //% subcategory="IR Receiver"
-    //% blockId=luckycar_infrared_on_ir_datagram
-    //% block="on IR datagram received"
-    //% weight=40
+    // subcategory="IR Receiver"
+    // blockId=luckycar_infrared_on_ir_datagram
+    // block="on IR datagram received"
+    // weight=40
+    /*
     export function onIrDatagram(handler: () => void) {
         initIrState();
         irState.onIrDatagram = handler;
     }
-
+    */
     /**
      * Returns the IR datagram as 32-bit hexadecimal string.
      * The last received datagram is returned or "0x00000000" if no data has been received yet.
      */
-    //% subcategory="IR Receiver"
-    //% blockId=luckycar_infrared_ir_datagram
-    //% block="IR datagram"
-    //% weight=30
+    // subcategory="IR Receiver"
+    // blockId=luckycar_infrared_ir_datagram
+    // block="IR datagram"
+    // weight=30
+    /*
     export function irDatagram(): string {
         basic.pause(0); // Yield to support background processing when called in tight loops
         initIrState();
@@ -531,14 +532,15 @@ namespace luckycar {
             ir_rec_to16BitHex(irState.commandSectionBits)
         );
     }
-
+    */
     /**
      * Returns true if any IR data was received since the last call of this function. False otherwise.
      */
-    //% subcategory="IR Receiver"
-    //% blockId=luckycar_infrared_was_any_ir_datagram_received
-    //% block="IR data was received"
-    //% weight=80
+    // subcategory="IR Receiver"
+    // blockId=luckycar_infrared_was_any_ir_datagram_received
+    // block="IR data was received"
+    // weight=80
+    /*
     export function wasIrDataReceived(): boolean {
         basic.pause(0); // Yield to support background processing when called in tight loops
         initIrState();
@@ -549,22 +551,24 @@ namespace luckycar {
             return false;
         }
     }
-
+    */
     /**
      * Returns the command code of a specific IR button.
      * @param button the button
      */
-    //% subcategory="IR Receiver"
-    //% blockId=luckycar_infrared_button_code
-    //% button.fieldEditor="gridpicker"
-    //% button.fieldOptions.columns=3
-    //% button.fieldOptions.tooltips="false"
-    //% block="IR button code %button"
-    //% weight=60
+    // subcategory="IR Receiver"
+    // blockId=luckycar_infrared_button_code
+    // button.fieldEditor="gridpicker"
+    // button.fieldOptions.columns=3
+    // button.fieldOptions.tooltips="false"
+    // block="IR button code %button"
+    // weight=60
+    /*
     export function irButtonCode(button: IrButton): number {
         basic.pause(0); // Yield to support background processing when called in tight loops
         return button as number;
     }
+    */
     function ir_rec_to16BitHex(value: number): string {
         let hex = "";
         for (let pos = 0; pos < 4; pos++) {
