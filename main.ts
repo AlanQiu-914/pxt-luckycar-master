@@ -1128,7 +1128,7 @@ namespace luckycar {
         //% brightness.min=0 brightness.max=255
         //% blockGap=8
         //% weight=80
-        //% parts="neopixel" advanced=true
+        //% parts="neopixel" 
         export function setCarBrightness(brightness: number): void {
             carstrip.brightness = brightness & 0xff;
         }
@@ -1137,7 +1137,7 @@ namespace luckycar {
         //% blockId="neopixel_set_car_all_rgb" block="car rgb show color %rgb=neopixel_colors"
         //% blockGap=8
         //% weight=80
-        //% parts="neopixel" advanced=true
+        //% parts="neopixel" 
         export function setCarRgbAll(rgb: number): void {
             carstrip.showColor(rgb >> 0);
         }
@@ -1166,7 +1166,6 @@ namespace luckycar {
         //% subcategory="RGB_CTR"
         //% weight=1
         //% blockId="neopixel_rgb" block="red %red|green %green|blue %blue"
-        //% advanced=true
         export function rgb(red: number, green: number, blue: number): number {
             return packRGB(red, green, blue);
         }
@@ -1177,7 +1176,6 @@ namespace luckycar {
         //% subcategory="RGB_CTR"
         //% weight=2 blockGap=8
         //% blockId="neopixel_colors" block="%color"
-        //% advanced=true
         export function colors(color: NeoPixelColors): number {
             return color;
         }
