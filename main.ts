@@ -1134,6 +1134,20 @@ namespace luckycar {
         }
 
         /**
+        * Rotate LEDs forward.
+        * You need to call ``show`` to make the changes visible.
+        * @param offset number of pixels to rotate forward, eg: 1
+        */
+        //% subcategory="RGB_CTR"
+        //% blockId="neopixel_car_rotate" block="car rgb rotate" blockGap=8
+        //% weight=80
+        //% parts="neopixel"
+        export function CarRgbRotate(): void {
+            const stride = carstrip._mode === NeoPixelMode.RGBW ? 4 : 3;
+            carstrip.buf.rotate(-1 * stride, carstrip.start * stride, carstrip._length * stride)
+        }
+
+        /**
          * Converts red, green, blue channels into a RGB color
          * @param red value of the red channel between 0 and 255. eg: 255
          * @param green value of the green channel between 0 and 255. eg: 255
