@@ -840,10 +840,10 @@ namespace luckycar {
             /**
              * Gets the number of pixels declared on the strip
              */
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_length" block="%strip|length" blockGap=8
-            //% strip.defl=strip
-            //% weight=60 advanced=true
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_length" block="%strip|length" blockGap=8
+            // strip.defl=strip
+            // weight=60 advanced=true
             length() {
                 return this._length;
             }
@@ -852,11 +852,11 @@ namespace luckycar {
              * Set the brightness of the strip. This flag only applies to future operation.
              * @param brightness a measure of LED brightness in 0-255. eg: 255
              */
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_set_brightness" block="%strip|set brightness %brightness" blockGap=8
-            //% strip.defl=strip
-            //% weight=59
-            //% parts="neopixel" advanced=true
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_set_brightness" block="%strip|set brightness %brightness" blockGap=8
+            // strip.defl=strip
+            // weight=59
+            // parts="neopixel" advanced=true
             setBrightness(brightness: number): void {
                 this.brightness = brightness & 0xff;
             }
@@ -864,11 +864,11 @@ namespace luckycar {
             /**
              * Apply brightness to current colors using a quadratic easing function.
              **/
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_each_brightness" block="%strip|ease brightness" blockGap=8
-            //% strip.defl=strip
-            //% weight=58
-            //% parts="neopixel" advanced=true
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_each_brightness" block="%strip|ease brightness" blockGap=8
+            // strip.defl=strip
+            // weight=58
+            // parts="neopixel" advanced=true
             easeBrightness(): void {
                 const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
                 const br = this.brightness;
