@@ -921,11 +921,11 @@ namespace luckycar {
              * You need to call ``show`` to make the changes visible.
              * @param offset number of pixels to shift forward, eg: 1
              */
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_shift" block="%strip|shift pixels by %offset" blockGap=8
-            //% strip.defl=strip
-            //% weight=40
-            //% parts="neopixel"
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_shift" block="%strip|shift pixels by %offset" blockGap=8
+            // strip.defl=strip
+            // weight=40
+            // parts="neopixel"
             shift(offset: number = 1): void {
                 offset = offset >> 0;
                 const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
@@ -937,11 +937,11 @@ namespace luckycar {
              * You need to call ``show`` to make the changes visible.
              * @param offset number of pixels to rotate forward, eg: 1
              */
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_rotate" block="%strip|rotate pixels by %offset" blockGap=8
-            //% strip.defl=strip
-            //% weight=39
-            //% parts="neopixel"
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_rotate" block="%strip|rotate pixels by %offset" blockGap=8
+            // strip.defl=strip
+            // weight=39
+            // parts="neopixel"
             rotate(offset: number = 1): void {
                 offset = offset >> 0;
                 const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
@@ -1202,8 +1202,8 @@ namespace luckycar {
          * @param s saturation from 0 to 99
          * @param l luminosity from 0 to 99
          */
-        //% subcategory="RGB_CTR"
-        //% blockId=neopixelHSL block="hue %h|saturation %s|luminosity %l"
+        // subcategory="RGB_CTR"
+        // blockId=neopixelHSL block="hue %h|saturation %s|luminosity %l"
         export function hsl(h: number, s: number, l: number): number {
             h = Math.round(h);
             s = Math.round(s);
