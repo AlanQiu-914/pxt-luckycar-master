@@ -1589,10 +1589,10 @@ namespace luckycar {
     }
     /**
     * TODO: Runs when line sensor finds or loses.
+    *sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
+    *event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     */
     //% block="On %sensor| line %event"
-    //% sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
-    //% event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     //% weight=50
     export function trackEvent(sensor: TrackPins, event: TrackEvents, handler: Action) {
         initEvents();
