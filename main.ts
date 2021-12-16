@@ -1648,7 +1648,7 @@ namespace luckycar {
     //% blockId=luckycar_AudioPin block="Set AudioPin on P9"
     //% weight=40
     export function setAudionPinFixed(): void {
-        pins.setAudioPin(AnalogPin.P9)
+        pins.setAudioPin(AnalogPin.P13)
     }
 
 
