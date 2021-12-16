@@ -891,12 +891,13 @@ namespace luckycar {
              * @param start offset in the LED strip to start the range
              * @param length number of LEDs in the range. eg: 4
              */
-            //% subcategory="RGB_CTR"
-            //% weight=89
-            //% blockId="neopixel_range" block="%strip|range from %start|with %length|leds"
-            //% strip.defl=strip
-            //% parts="neopixel"
-            //% blockSetVariable=range
+            // subcategory="RGB_CTR"
+            // weight=89
+            // blockId="neopixel_range" block="%strip|range from %start|with %length|leds"
+            // strip.defl=strip
+            // parts="neopixel"
+            // blockSetVariable=range
+            /*
             range(start: number, length: number): Strip {
                 start = start >> 0;
                 length = length >> 0;
@@ -910,7 +911,7 @@ namespace luckycar {
                 strip._mode = this._mode;
                 return strip;
             }
-
+            */
             /**
              * Shift LEDs forward and clear with zeros.
              * You need to call ``show`` to make the changes visible.
