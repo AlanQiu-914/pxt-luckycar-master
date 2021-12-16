@@ -1144,7 +1144,8 @@ namespace luckycar {
         //% parts="neopixel"
         export function CarRgbRotate(): void {
             const stride = carstrip._mode === NeoPixelMode.RGBW ? 4 : 3;
-            carstrip.buf.rotate(-1 * stride, carstrip.start * stride, carstrip._length * stride)
+            carstrip.buf.rotate(-1 * stride, carstrip.start * stride, carstrip._length * stride);
+            carstrip.show();;
         }
 
         /**
