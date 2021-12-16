@@ -702,12 +702,13 @@ namespace luckycar {
              * @param value current value to plot
              * @param high maximum value, eg: 255
              */
-            //% subcategory="RGB_CTR"
-            //% weight=84
-            //% blockId=neopixel_show_bar_graph block="%strip|show bar graph of %value|up to %high"
-            //% strip.defl=strip
-            //% icon="\uf080"
-            //% parts="neopixel"
+            // subcategory="RGB_CTR"
+            // weight=84
+            // blockId=neopixel_show_bar_graph block="%strip|show bar graph of %value|up to %high"
+            // strip.defl=strip
+            // icon="\uf080"
+            // parts="neopixel"
+            /*
             showBarGraph(value: number, high: number): void {
                 if (high <= 0) {
                     this.clear();
@@ -735,23 +736,24 @@ namespace luckycar {
                 }
                 this.show();
             }
-
+            */
             /**
              * Set LED to a given color (range 0-255 for r, g, b).
              * You need to call ``show`` to make the changes visible.
              * @param pixeloffset position of the NeoPixel in the strip
              * @param rgb RGB color of the LED
              */
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_set_pixel_color" block="%strip|set pixel color at %pixeloffset|to %rgb=neopixel_colors"
-            //% strip.defl=strip
-            //% blockGap=8
-            //% weight=80
-            //% parts="neopixel" advanced=true
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_set_pixel_color" block="%strip|set pixel color at %pixeloffset|to %rgb=neopixel_colors"
+            // strip.defl=strip
+            // blockGap=8
+            // weight=80
+            // parts="neopixel" advanced=true
+            
             setPixelColor(pixeloffset: number, rgb: number): void {
                 this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
             }
-
+            
             /**
              * Sets the number of pixels in a matrix shaped strip
              * @param width number of pixels in a row
@@ -794,18 +796,19 @@ namespace luckycar {
              * @param pixeloffset position of the LED in the strip
              * @param white brightness of the white LED
              */
-            //% subcategory="RGB_CTR"
-            //% blockId="neopixel_set_pixel_white" block="%strip|set pixel white LED at %pixeloffset|to %white"
-            //% strip.defl=strip
-            //% blockGap=8
-            //% weight=80
-            //% parts="neopixel" advanced=true
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_set_pixel_white" block="%strip|set pixel white LED at %pixeloffset|to %white"
+            // strip.defl=strip
+            // blockGap=8
+            // weight=80
+            // parts="neopixel" advanced=true
+            /*
             setPixelWhiteLED(pixeloffset: number, white: number): void {
                 if (this._mode === NeoPixelMode.RGBW) {
                     this.setPixelW(pixeloffset >> 0, white >> 0);
                 }
             }
-
+            */
             /**
              * Send all the changes to the strip.
              */
