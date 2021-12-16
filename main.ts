@@ -617,11 +617,11 @@ namespace luckycar {
              * Shows all LEDs to a given color (range 0-255 for r, g, b).
              * @param rgb RGB color of the LED
              */
-            // subcategory="RGB_CTR"
-            // blockId="neopixel_set_strip_color" block="%strip|show color %rgb=neopixel_colors"
-            // strip.defl=strip
-            // weight=85 blockGap=8
-            // parts="neopixel"
+            //% subcategory="RGB_CTR"
+            //% blockId="neopixel_set_strip_color" block="%strip|show color %rgb=neopixel_colors"
+            //% strip.defl=strip
+            //% weight=85 blockGap=8
+            //% parts="neopixel"
             showColor(rgb: number) {
                 rgb = rgb >> 0;
                 this.setAllRGB(rgb);
@@ -633,12 +633,11 @@ namespace luckycar {
              * @param startHue the start hue value for the rainbow, eg: 1
              * @param endHue the end hue value for the rainbow, eg: 360
              */
-            // subcategory="RGB_CTR"
-            // blockId="neopixel_set_strip_rainbow" block="%strip|show rainbow from %startHue|to %endHue"
-            // strip.defl=strip
-            // weight=85 blockGap=8
-            // parts="neopixel"
-            /*
+            //% subcategory="RGB_CTR"
+            //% blockId="neopixel_set_strip_rainbow" block="%strip|show rainbow from %startHue|to %endHue"
+            //% strip.defl=strip
+            //% weight=85 blockGap=8
+            //% parts="neopixel"
             showRainbow(startHue: number = 1, endHue: number = 360) {
                 if (this._length <= 0) return;
 
@@ -695,20 +694,19 @@ namespace luckycar {
                 }
                 this.show();
             }
-            */
+
             /**
              * Displays a vertical bar graph based on the `value` and `high` value.
              * If `high` is 0, the chart gets adjusted automatically.
              * @param value current value to plot
              * @param high maximum value, eg: 255
              */
-            // subcategory="RGB_CTR"
-            // weight=84
-            // blockId=neopixel_show_bar_graph block="%strip|show bar graph of %value|up to %high"
-            // strip.defl=strip
-            // icon="\uf080"
-            // parts="neopixel"
-            /*
+            //% subcategory="RGB_CTR"
+            //% weight=84
+            //% blockId=neopixel_show_bar_graph block="%strip|show bar graph of %value|up to %high"
+            //% strip.defl=strip
+            //% icon="\uf080"
+            //% parts="neopixel"
             showBarGraph(value: number, high: number): void {
                 if (high <= 0) {
                     this.clear();
@@ -736,24 +734,23 @@ namespace luckycar {
                 }
                 this.show();
             }
-            */
+
             /**
              * Set LED to a given color (range 0-255 for r, g, b).
              * You need to call ``show`` to make the changes visible.
              * @param pixeloffset position of the NeoPixel in the strip
              * @param rgb RGB color of the LED
              */
-            // subcategory="RGB_CTR"
-            // blockId="neopixel_set_pixel_color" block="%strip|set pixel color at %pixeloffset|to %rgb=neopixel_colors"
-            // strip.defl=strip
-            // blockGap=8
-            // weight=80
-            // parts="neopixel" advanced=true
-            
+            //% subcategory="RGB_CTR"
+            //% blockId="neopixel_set_pixel_color" block="%strip|set pixel color at %pixeloffset|to %rgb=neopixel_colors"
+            //% strip.defl=strip
+            //% blockGap=8
+            //% weight=80
+            //% parts="neopixel" advanced=true
             setPixelColor(pixeloffset: number, rgb: number): void {
                 this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
             }
-            
+
             /**
              * Sets the number of pixels in a matrix shaped strip
              * @param width number of pixels in a row
@@ -796,19 +793,18 @@ namespace luckycar {
              * @param pixeloffset position of the LED in the strip
              * @param white brightness of the white LED
              */
-            // subcategory="RGB_CTR"
-            // blockId="neopixel_set_pixel_white" block="%strip|set pixel white LED at %pixeloffset|to %white"
-            // strip.defl=strip
-            // blockGap=8
-            // weight=80
-            // parts="neopixel" advanced=true
-            /*
+            //% subcategory="RGB_CTR"
+            //% blockId="neopixel_set_pixel_white" block="%strip|set pixel white LED at %pixeloffset|to %white"
+            //% strip.defl=strip
+            //% blockGap=8
+            //% weight=80
+            //% parts="neopixel" advanced=true
             setPixelWhiteLED(pixeloffset: number, white: number): void {
                 if (this._mode === NeoPixelMode.RGBW) {
                     this.setPixelW(pixeloffset >> 0, white >> 0);
                 }
             }
-            */
+
             /**
              * Send all the changes to the strip.
              */
@@ -840,10 +836,10 @@ namespace luckycar {
             /**
              * Gets the number of pixels declared on the strip
              */
-            // subcategory="RGB_CTR"
-            // blockId="neopixel_length" block="%strip|length" blockGap=8
-            // strip.defl=strip
-            // weight=60 advanced=true
+            //% subcategory="RGB_CTR"
+            //% blockId="neopixel_length" block="%strip|length" blockGap=8
+            //% strip.defl=strip
+            //% weight=60 advanced=true
             length() {
                 return this._length;
             }
@@ -852,11 +848,11 @@ namespace luckycar {
              * Set the brightness of the strip. This flag only applies to future operation.
              * @param brightness a measure of LED brightness in 0-255. eg: 255
              */
-            // subcategory="RGB_CTR"
-            // blockId="neopixel_set_brightness" block="%strip|set brightness %brightness" blockGap=8
-            // strip.defl=strip
-            // weight=59
-            // parts="neopixel" advanced=true
+            //% subcategory="RGB_CTR"
+            //% blockId="neopixel_set_brightness" block="%strip|set brightness %brightness" blockGap=8
+            //% strip.defl=strip
+            //% weight=59
+            //% parts="neopixel" advanced=true
             setBrightness(brightness: number): void {
                 this.brightness = brightness & 0xff;
             }
@@ -864,11 +860,11 @@ namespace luckycar {
             /**
              * Apply brightness to current colors using a quadratic easing function.
              **/
-            // subcategory="RGB_CTR"
-            // blockId="neopixel_each_brightness" block="%strip|ease brightness" blockGap=8
-            // strip.defl=strip
-            // weight=58
-            // parts="neopixel" advanced=true
+            //% subcategory="RGB_CTR"
+            //% blockId="neopixel_each_brightness" block="%strip|ease brightness" blockGap=8
+            //% strip.defl=strip
+            //% weight=58
+            //% parts="neopixel" advanced=true
             easeBrightness(): void {
                 const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
                 const br = this.brightness;
@@ -895,13 +891,12 @@ namespace luckycar {
              * @param start offset in the LED strip to start the range
              * @param length number of LEDs in the range. eg: 4
              */
-            // subcategory="RGB_CTR"
-            // weight=89
-            // blockId="neopixel_range" block="%strip|range from %start|with %length|leds"
-            // strip.defl=strip
-            // parts="neopixel"
-            // blockSetVariable=range
-            /*
+            //% subcategory="RGB_CTR"
+            //% weight=89
+            //% blockId="neopixel_range" block="%strip|range from %start|with %length|leds"
+            //% strip.defl=strip
+            //% parts="neopixel"
+            //% blockSetVariable=range
             range(start: number, length: number): Strip {
                 start = start >> 0;
                 length = length >> 0;
@@ -915,7 +910,7 @@ namespace luckycar {
                 strip._mode = this._mode;
                 return strip;
             }
-            */
+
             /**
              * Shift LEDs forward and clear with zeros.
              * You need to call ``show`` to make the changes visible.
@@ -951,9 +946,9 @@ namespace luckycar {
             /**
              * Set the pin where the neopixel is connected, defaults to P0.
              */
-            // subcategory="RGB_CTR"
-            // weight=10
-            // parts="neopixel" advanced=true
+            //% subcategory="RGB_CTR"
+            //% weight=10
+            //% parts="neopixel" advanced=true
             setPin(pin: DigitalPin): void {
                 this.pin = pin;
                 pins.digitalWritePin(this.pin, 0);
@@ -963,10 +958,10 @@ namespace luckycar {
             /**
              * Estimates the electrical current (mA) consumed by the current light configuration.
              */
-            // subcategory="RGB_CTR"
-            // weight=9 blockId=neopixel_power block="%strip|power (mA)"
-            // strip.defl=strip
-            // advanced=true
+            //% subcategory="RGB_CTR"
+            //% weight=9 blockId=neopixel_power block="%strip|power (mA)"
+            //% strip.defl=strip
+            //% advanced=true
             power(): number {
                 const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
                 const end = this.start + this._length;
@@ -1068,13 +1063,12 @@ namespace luckycar {
          * @param pin the pin where the neopixel is connected.
          * @param numleds number of leds in the strip, eg: 24,30,60,64
          */
-        // subcategory="RGB_CTR"
-        // blockId="neopixel_create" block="NeoPixel at pin %pin|with %numleds|leds as %mode"
-        // weight=90 blockGap=8
-        // parts="neopixel"
-        // trackArgs=0,2
-        // blockSetVariable=strip
-        /*
+        //% subcategory="RGB_CTR"
+        //% blockId="neopixel_create" block="NeoPixel at pin %pin|with %numleds|leds as %mode"
+        //% weight=90 blockGap=8
+        //% parts="neopixel"
+        //% trackArgs=0,2
+        //% blockSetVariable=strip
         export function create(pin: DigitalPin, numleds: number, mode: NeoPixelMode): Strip {
             let strip = new Strip();
             let stride = mode === NeoPixelMode.RGBW ? 4 : 3;
@@ -1087,7 +1081,6 @@ namespace luckycar {
             strip.setPin(pin)
             return strip;
         }
-        */
         /**
          * rgb init DigitalPin.P0, 4 leds,NeoPixelMode.RGB
          */
@@ -1172,15 +1165,14 @@ namespace luckycar {
         /**
          * Gets the RGB value of a known color
         */
-        // subcategory="RGB_CTR"
-        // weight=2 blockGap=8
-        // blockId="neopixel_colors" block="%color"
-        // advanced=true
-        /*
+        //% subcategory="RGB_CTR"
+        //% weight=2 blockGap=8
+        //% blockId="neopixel_colors" block="%color"
+        //% advanced=true
         export function colors(color: NeoPixelColors): number {
             return color;
         }
-        */
+
         function packRGB(a: number, b: number, c: number): number {
             return ((a & 0xFF) << 16) | ((b & 0xFF) << 8) | (c & 0xFF);
         }
