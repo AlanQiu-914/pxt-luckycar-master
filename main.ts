@@ -1590,20 +1590,20 @@ namespace luckycar {
         let mesuBrightness = 0;
         if(num == 0)
         {
-            for(let i = 0;i < 10;i++)
+            for(let i = 0;i < 6;i++)
             {
-                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P3);
-                basic.pause(10);
-            }
-            mesuBrightness = mesuBrightness/10;
-        }
-        else if(num == 1)
-        {
-            for (let i = 0; i < 10; i++) {
                 mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P10);
                 basic.pause(10);
             }
-            mesuBrightness = mesuBrightness / 10;
+            mesuBrightness = Math.round(mesuBrightness/10);
+        }
+        else if(num == 1)
+        {
+            for (let i = 0; i < 6; i++) {
+                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P3);
+                basic.pause(10);
+            }
+            mesuBrightness = Math.round(mesuBrightness / 10);
         }
         return (1024-mesuBrightness);
     }
