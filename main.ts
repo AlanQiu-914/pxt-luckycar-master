@@ -1198,7 +1198,8 @@ namespace luckycar {
      * 小车马达、循迹控制
      */
 
-    let _initEvents = true
+    let _initEvents_center = true
+    let _initEvents_side = true
     /**
     * Unit of Ultrasound Module
     */
@@ -1238,11 +1239,17 @@ namespace luckycar {
     /**
      * Pins used to generate events
      */
-    export enum TrackPins {
+    export enum CenterTrackPins {
         //% block="Center_Left"
         Center_Left = DAL.MICROBIT_ID_IO_P15,
         //% block="Center_Right"
         Center_Right = DAL.MICROBIT_ID_IO_P11,
+    }
+
+    /**
+     * Pins used to generate events
+     */
+    export enum SideTrackPins {
         //% block="Side_Left"
         Side_Left = DAL.MICROBIT_ID_IO_P7,
         //% block="Side_Right"
@@ -1590,12 +1597,24 @@ namespace luckycar {
     /**
     * TODO: Runs when line sensor finds or loses.
     */
-    //% block="On %sensor| line %event"
+    //% block="On Center %sensor| line %event"
     //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
     //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     //% weight=50
-    export function trackEvent(sensor: TrackPins, event: TrackEvents, handler: Action) {
-        initEvents();
+    export function trackEventCenter(sensor: CenterTrackPins, event: TrackEvents, handler: Action) {
+        initEvents_center();
+        control.onEvent(<number>sensor, <number>event, handler);
+    }
+
+    /**
+    * TODO: Runs when line sensor finds or loses.
+    */
+    //% block="On Side %sensor| line %event"
+    //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
+    //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
+    //% weight=50
+    export function trackEventSide(sensor: SideTrackPins, event: TrackEvents, handler: Action) {
+        initEvents_side();
         control.onEvent(<number>sensor, <number>event, handler);
     }
 
@@ -1620,18 +1639,25 @@ namespace luckycar {
     }
 
 
-    function initEvents(): void {
-        if (_initEvents) {
-            pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
-            pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
+    function initEvents_center(): void {
+        if (_initEvents_center) {
             pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
             pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
 
-            pins.setEvents(DigitalPin.P6, PinEventType.Edge);
-            pins.setEvents(DigitalPin.P7, PinEventType.Edge);
             pins.setEvents(DigitalPin.P11, PinEventType.Edge);
             pins.setEvents(DigitalPin.P15, PinEventType.Edge);
-            _initEvents = false;
+            _initEvents_center = false;
+        }
+    }
+
+    function initEvents_side(): void {
+        if (_initEvents_side) {
+            pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
+            pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
+
+            pins.setEvents(DigitalPin.P6, PinEventType.Edge);
+            pins.setEvents(DigitalPin.P7, PinEventType.Edge);
+            _initEvents_side = false;
         }
     }
 
