@@ -1174,10 +1174,10 @@ namespace luckycar {
         /**
          * Gets the RGB value of a known color
         */
-        //% subcategory="RGB_CTR"
-        //% weight=2 blockGap=8
-        //% blockId="neopixel_colors" block="%color"
-        //% advanced=true
+        // subcategory="RGB_CTR"
+        // weight=2 blockGap=8
+        // blockId="neopixel_colors" block="%color"
+        // advanced=true
         export function colors(color: NeoPixelColors): number {
             return color;
         }
