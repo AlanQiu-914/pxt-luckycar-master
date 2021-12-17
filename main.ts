@@ -1326,7 +1326,7 @@ namespace luckycar {
             if (ColorNum() == colorchoice)
                 count++;
         }
-        if (count > 3)
+        if (count > 2)
             return true;
         else
             return false;
