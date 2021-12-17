@@ -1247,6 +1247,82 @@ namespace luckycar {
         }
     }
 
+    /**
+    * 小车底部颜色识别
+    */
+    //读光敏电阻数据，取平均值操作
+    function ReadColorValue(count:number):number{
+        let value = 0;
+        for(let i=0;i<count;i++)
+        {
+            value += pins.analogReadPin(AnalogPin.P2);
+            basic.pause(20);
+        }
+        value = Math.round(value/count);
+        return value;
+    }
+
+
+    //返回色彩值
+    function ColorNum():number{
+        let num = 0;        //1:red,2:green,3:blue,4:black,5:white
+        let redvalue=0,greenvalue=0,bluevalue=0;
+        let minvalue=0,maxvalue=0;
+        neopixel.setCarBrightness(255);
+
+        //发红光
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Red));
+        redvalue = ReadColorValue(5);
+
+        //发绿光
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Green));
+        greenvalue = ReadColorValue(5);
+
+        //发蓝光
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Blue));
+        bluevalue = ReadColorValue(5);
+
+        maxvalue = Math.max(Math.max(redvalue, greenvalue),bluevalue);
+        minvalue = Math.min(Math.min(redvalue, greenvalue), bluevalue);
+
+        if (minvalue > 800)
+            num = 4;
+        else if (maxvalue < 700)
+            num = 5;
+        else if (redvalue = minvalue)
+            num = 1;
+        else if (greenvalue = minvalue)
+            num = 2;
+        else if (bluevalue = minvalue)
+            num = 3;
+
+        return num;
+    }
+
+    export enum ColorChoiceValue {
+        //% block="Red"
+        Red = 1,
+        //% block="Green"
+        Green = 2,
+        //% block="Blue"
+        Blue = 3,
+        //% block="Black"
+        Black = 4,
+        //% block="White"
+        White = 5
+    }
+    /**
+    * TODO: find the color
+    */
+    //% block="%colorchoice color is find"
+    //% weight=1
+    export function findcolornum(colorchoice: ColorChoiceValue): boolean {
+        if(ColorNum() == colorchoice)
+            return true;
+        else
+            return false;
+    }
+    //
 
     /**
      * 小车马达、循迹控制
