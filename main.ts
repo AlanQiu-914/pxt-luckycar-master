@@ -1267,20 +1267,23 @@ namespace luckycar {
     function ColorNum():number{
         let num = 0;        //1:red,2:green,3:blue,4:black,5:white
         let redvalue=0,greenvalue=0,bluevalue=0;
-        let minvalue=0,maxvalue=0;
+        let minvalue=1024,maxvalue=0;
         neopixel.setCarBrightness(255);
 
         //发红光
         neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Red));
-        redvalue = ReadColorValue(5);
+        redvalue = ReadColorValue(10);
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
 
         //发绿光
         neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Green));
-        greenvalue = ReadColorValue(5);
+        greenvalue = ReadColorValue(10);
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
 
         //发蓝光
         neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Blue));
-        bluevalue = ReadColorValue(5);
+        bluevalue = ReadColorValue(10);
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
 
         maxvalue = Math.max(Math.max(redvalue, greenvalue),bluevalue);
         minvalue = Math.min(Math.min(redvalue, greenvalue), bluevalue);
