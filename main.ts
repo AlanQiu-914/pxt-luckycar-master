@@ -1320,15 +1320,13 @@ namespace luckycar {
     //% block="%colorchoice color is find"
     //% weight=1
     export function findcolornum(colorchoice: ColorChoiceValue): boolean {
-        let count = 5;
+        let count = 0;
         for(let i=0;i<5;i++)
         {
             if (ColorNum() == colorchoice)
                 count++;
-            else
-                count--;
         }
-        if (count > 7)
+        if (count > 3)
             return true;
         else
             return false;
