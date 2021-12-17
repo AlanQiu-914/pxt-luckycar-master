@@ -1256,7 +1256,7 @@ namespace luckycar {
         for(let i=0;i<count;i++)
         {
             value += pins.analogReadPin(AnalogPin.P2);
-            basic.pause(10);
+            basic.pause(5);
         }
         value = Math.round(value/count);
         return value;
@@ -1320,13 +1320,15 @@ namespace luckycar {
     //% block="%colorchoice color is find"
     //% weight=1
     export function findcolornum(colorchoice: ColorChoiceValue): boolean {
-        let count = 0;
+        let count = 5;
         for(let i=0;i<5;i++)
         {
             if (ColorNum() == colorchoice)
                 count++;
+            else
+                count--;
         }
-        if (count > 2)
+        if (count > 7)
             return true;
         else
             return false;
