@@ -1272,17 +1272,17 @@ namespace luckycar {
 
         //发红光
         neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Red));
-        redvalue = ReadColorValue(10);
+        redvalue = ReadColorValue(5);
         neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
 
         //发绿光
         neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Green));
-        greenvalue = ReadColorValue(10);
+        greenvalue = ReadColorValue(5);
         neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
 
         //发蓝光
         neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Blue));
-        bluevalue = ReadColorValue(10);
+        bluevalue = ReadColorValue(5);
         neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
 
         maxvalue = Math.max(Math.max(redvalue, greenvalue),bluevalue);
