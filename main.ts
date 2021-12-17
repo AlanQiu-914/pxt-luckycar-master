@@ -1292,11 +1292,11 @@ namespace luckycar {
             num = 4;
         else if (maxvalue < 700)
             num = 5;
-        else if (redvalue = minvalue)
+        else if (redvalue == minvalue)
             num = 1;
-        else if (greenvalue = minvalue)
+        else if (greenvalue == minvalue)
             num = 2;
-        else if (bluevalue = minvalue)
+        else if (bluevalue == minvalue)
             num = 3;
 
         return num;
