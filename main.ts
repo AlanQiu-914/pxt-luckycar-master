@@ -1110,7 +1110,8 @@ namespace luckycar {
         }
 
         //% subcategory="RGB_CTR"
-        //% blockId="neopixel_set_car_pixel_color" block="set car pixel color at %pixeloffset|to %rgb=neopixel_colors"
+        //% blockId="neopixel_set_car_pixel_color" block="set car pixel color at %pixeloffset|to $rgb"
+        //% rgb.shadow="colorNumberPicker"
         //% blockGap=8
         //% weight=80
         //% parts="neopixel" 
@@ -1176,8 +1177,9 @@ namespace luckycar {
         */
         //% subcategory="RGB_CTR"
         //% weight=2 blockGap=8
-        //% blockId="neopixel_colors" block="%color"
-        export function colors(color: NeoPixelColors): number {
+        //% blockId="neopixel_colors" block="$color"
+        //% color.shadow="colorNumberPicker"
+        export function colors(color: number): number {
             return color;
         }
 
