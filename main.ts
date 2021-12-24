@@ -1371,6 +1371,15 @@ namespace luckycar {
         right
     }
 
+    /**
+    * Stop modes. Coast or Brake
+    */
+    export enum CarStopMode {
+        //% block="no brake"
+        Coast,
+        //% block="brake"
+        Brake
+    }
     export enum BrightnessChoice {
         //% block="Left" enumval=0
         Left,
@@ -1586,10 +1595,18 @@ namespace luckycar {
     /**
     * TODO: stopcar
     */
-    //% blockId=luckycar_stopcar block="Stop car immediatly"
+    //% blockId=luckycar_stopcar block="Stop car with %mode"
     //% weight=70
-    export function stopcar(): void {
-        motors(0, 0)
+    export function stopcar(mode: CarStopMode): void {
+        if (mode == 0)
+             motors(0, 0);
+        else{
+            pins.analogWritePin(AnalogPin.P0, 1023);
+            pins.digitalWritePin(DigitalPin.P12, 1);
+
+            pins.analogWritePin(AnalogPin.P1, 1023);
+            pins.digitalWritePin(DigitalPin.P8, 1);
+        }
     }
 
     /**
