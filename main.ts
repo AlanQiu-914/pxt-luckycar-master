@@ -94,7 +94,7 @@ const enum IrProtocol {
     NEC = 1,
 }
 //% weight=50 color=#e7660b icon="\uf1b9"
-namespace luckycar {
+namespace alphacar {
     /**
      * 小车马达、循迹控制
      */
@@ -958,19 +958,19 @@ namespace luckycar {
         neopixel.setCarBrightness(255);
 
         //发红光
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Red));
+        neopixel.setCarPixelColor(alphacar.RgbNum.front_dowm, alphacar.neopixel.colors(NeoPixelColors.Red));
         redvalue = ReadColorValue(5);
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
+        neopixel.setCarPixelColor(alphacar.RgbNum.front_dowm, alphacar.neopixel.colors(NeoPixelColors.Black));
 
         //发绿光
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Green));
+        neopixel.setCarPixelColor(alphacar.RgbNum.front_dowm, alphacar.neopixel.colors(NeoPixelColors.Green));
         greenvalue = ReadColorValue(5);
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
+        neopixel.setCarPixelColor(alphacar.RgbNum.front_dowm, alphacar.neopixel.colors(NeoPixelColors.Black));
 
         //发蓝光
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Blue));
+        neopixel.setCarPixelColor(alphacar.RgbNum.front_dowm, alphacar.neopixel.colors(NeoPixelColors.Blue));
         bluevalue = ReadColorValue(5);
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
+        neopixel.setCarPixelColor(alphacar.RgbNum.front_dowm, alphacar.neopixel.colors(NeoPixelColors.Black));
 
         maxvalue = Math.max(Math.max(redvalue, greenvalue), bluevalue);
         minvalue = Math.min(Math.min(redvalue, greenvalue), bluevalue);
