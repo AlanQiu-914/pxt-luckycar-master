@@ -95,6 +95,493 @@ const enum IrProtocol {
 }
 namespace luckycar {
     /**
+     * 小车马达、循迹控制
+     */
+
+    let _initEvents_center = true
+    let _initEvents_side = true
+    /**
+    * Unit of Ultrasound Module
+    */
+    export enum SonarUnit {
+        //% block="cm"
+        Centimeters,
+        //% block="inches"
+        Inches
+    }
+    /**
+    * Select the motor on the left or right
+    */
+    export enum MotorsList {
+        //% blockId="M1" block="M1"
+        M1 = 0,
+        //% blockId="M2" block="M2"
+        M2 = 1
+    }
+
+    export enum Direction {
+        //% block="Forward" enumval=0
+        forward,
+        //% block="Backward" enumval=1
+        backward,
+        //% block="Left" enumval=2
+        left,
+        //% block="Right" enumval=3
+        right
+    }
+
+    /**
+    * Stop modes. Coast or Brake
+    */
+    export enum CarStopMode {
+        //% block="no brake"
+        Coast,
+        //% block="brake"
+        Brake
+    }
+    export enum BrightnessChoice {
+        //% block="Left" enumval=0
+        Left,
+        //% block="Right" enumval=1
+        Right
+    }
+    /**
+     * Pins used to generate events
+     */
+    export enum CenterTrackPins {
+        //% block="Center_Left"
+        Center_Left = EventBusSource.MICROBIT_ID_IO_P15,
+        //% block="Center_Right"
+        Center_Right = EventBusSource.MICROBIT_ID_IO_P11
+    }
+
+    /**
+     * Pins used to generate events
+     */
+    export enum SideTrackPins {
+        //% block="Side_Left"
+        Side_Left = EventBusSource.MICROBIT_ID_IO_P7,
+        //% block="Side_Right"
+        Side_Right = EventBusSource.MICROBIT_ID_IO_P6
+    }
+    /**
+    * Line Sensor events    MICROBIT_PIN_EVT_RISE
+    */
+    export enum TrackEvents {
+        //% block="Found" 
+        FindLine = EventBusValue.MICROBIT_PIN_EVT_FALL,
+        //% block="Lost" 
+        LoseLine = EventBusValue.MICROBIT_PIN_EVT_RISE
+    }
+    /**
+     * Pins used to generate events
+     */
+    export enum TrackPinsNum {
+        //% block="Center_Left"
+        Center_Left = 0,
+        //% block="Center_Right"
+        Center_Right = 1,
+        //% block="Side_Left"
+        Side_Left = 2,
+        //% block="Side_Right"
+        Side_Right = 3
+    }
+    /**
+    * Line Sensor state    
+    */
+    export enum TrackState {
+        //% block="Found" 
+        FindLine = 0,
+        //% block="Lost" 
+        LoseLine = 1
+    }
+
+
+    /**
+    * Status List of Center Tracking Modules
+    */
+    export enum CenterTrackingState {
+        //% block="● ●" enumval=0
+        C_L_R_line,
+
+        //% block="◌ ●" enumval=1
+        C_L_unline_R_line,
+
+        //% block="● ◌" enumval=2
+        C_L_line_R_unline,
+
+        //% block="◌ ◌" enumval=3
+        C_L_R_unline
+    }
+    /**
+    * Status List of Side Tracking Modules
+    */
+    export enum SideTrackingState {
+        //% block="● ●" enumval=0
+        S_L_R_line,
+
+        //% block="◌ ●" enumval=1
+        S_L_unline_R_line,
+
+        //% block="● ◌" enumval=2
+        S_L_line_R_unline,
+
+        //% block="◌ ◌" enumval=3
+        S_L_R_unline
+    }
+
+    /**
+     * TODO: Set the speed of left and right wheels. 
+     * @param lspeed Left wheel speed , eg: 100
+     * @param rspeed Right wheel speed, eg: -100
+     */
+    //% subcategory="Motors"
+    //% block="Set left wheel speed %lspeed\\% |right wheel speed %rspeed\\%"
+    //% lspeed.min=-100 lspeed.max=100
+    //% rspeed.min=-100 rspeed.max=100
+    //% weight=100
+    export function motors(lspeed: number = 50, rspeed: number = 50): void {
+        if (lspeed > 100) {
+            lspeed = 100;
+        } else if (lspeed < -100) {
+            lspeed = -100;
+        }
+        if (rspeed > 100) {
+            rspeed = 100;
+        } else if (rspeed < -100) {
+            rspeed = -100;
+        }
+
+        if (lspeed >= 0) {
+            pins.analogWritePin(AnalogPin.P0, lspeed == 100 ? 1023 : (lspeed * 1024) / 100);
+            pins.digitalWritePin(DigitalPin.P12, 0);
+        }
+        else {
+            lspeed = Math.abs(lspeed);
+            pins.analogWritePin(AnalogPin.P0, ((100 - lspeed) * 1024) / 100);
+            pins.digitalWritePin(DigitalPin.P12, 1);
+        }
+        if (rspeed >= 0) {
+            pins.analogWritePin(AnalogPin.P1, rspeed == 100 ? 1023 : (rspeed * 1024) / 100);
+            pins.digitalWritePin(DigitalPin.P8, 0);
+        }
+        else {
+            rspeed = Math.abs(rspeed);
+            pins.analogWritePin(AnalogPin.P1, ((100 - rspeed) * 1024) / 100);
+            pins.digitalWritePin(DigitalPin.P8, 1);
+        }
+    }
+    /**
+    * TODO: Full speed operation lasts for 10 seconds,speed is 100.
+    * @param dir Driving direction, eg: Direction.forward
+    * @param speed Running speed, eg: 50
+    * @param time Travel time, eg: 5
+    */
+    //% subcategory="Motors"
+    //% block="Go %dir at speed%speed\\% for %time seconds"
+    //% weight=95
+    export function moveTime(dir: Direction, speed: number, time: number): void {
+        if (dir == 0) {
+            motors(speed, speed);
+            basic.pause(time * 1000)
+            motors(0, 0)
+        }
+        if (dir == 1) {
+            motors(-speed, -speed);
+            basic.pause(time * 1000)
+            motors(0, 0)
+        }
+        if (dir == 2) {
+            motors(-speed, speed);
+            basic.pause(time * 1000)
+            motors(0, 0)
+        }
+        if (dir == 3) {
+            motors(speed, -speed);
+            basic.pause(time * 1000)
+            motors(0, 0)
+        }
+    }
+    /**
+    * TODO: full speed move forward,speed is 100.
+    */
+    //% subcategory="Motors"
+    //% block="Go straight at full speed"
+    //% weight=90
+    export function forward(): void {
+        pins.analogWritePin(AnalogPin.P0, 1023);
+        pins.digitalWritePin(DigitalPin.P12, 0);
+
+        pins.analogWritePin(AnalogPin.P1, 1023);
+        pins.digitalWritePin(DigitalPin.P8, 0);
+    }
+
+
+    /**
+    * TODO: full speed move back,speed is -100.
+    */
+    //% subcategory="Motors"
+    //% block="Reverse at full speed"
+    //% weight=85
+    export function backforward(): void {
+        pins.analogWritePin(AnalogPin.P0, 0);
+        pins.digitalWritePin(DigitalPin.P12, 1);
+
+        pins.analogWritePin(AnalogPin.P1, 0);
+        pins.digitalWritePin(DigitalPin.P8, 1);
+
+    }
+    /**
+    * TODO: full speed turnleft.
+    */
+    //% subcategory="Motors"
+    //% block="Turn left at full speed"
+    //% weight=80
+    export function turnleft(): void {
+        pins.analogWritePin(AnalogPin.P0, 1023);
+        pins.digitalWritePin(DigitalPin.P12, 0);
+
+        pins.analogWritePin(AnalogPin.P1, 0);
+        pins.digitalWritePin(DigitalPin.P8, 1);
+    }
+    /**
+    * TODO: full speed turnright.
+    */
+    //% subcategory="Motors"
+    //% block="Turn right at full speed"
+    //% weight=75
+    export function turnright(): void {
+        pins.analogWritePin(AnalogPin.P0, 0);
+        pins.digitalWritePin(DigitalPin.P12, 1);
+
+        pins.analogWritePin(AnalogPin.P1, 1023);
+        pins.digitalWritePin(DigitalPin.P8, 0);
+    }
+    /**
+    * TODO: stopcar
+    */
+    //% subcategory="Motors"
+    //% block="Stop car with %mode"
+    //% weight=70
+    export function stopcar(mode: CarStopMode): void {
+        if (mode == 0)
+            motors(0, 0);
+        else {
+            pins.analogWritePin(AnalogPin.P0, 1023);
+            pins.digitalWritePin(DigitalPin.P12, 1);
+
+            pins.analogWritePin(AnalogPin.P1, 1023);
+            pins.digitalWritePin(DigitalPin.P8, 1);
+        }
+    }
+
+    /**
+    * Judging the Current Status of Center Tracking Module. 
+    * @param state Four states of Center tracking module, eg: TrackingState.C_L_R_line
+    */
+    //% subcategory="LineSensor"
+    //% block="Center tracking state is %state"
+    //% weight=65
+    export function centertracking(state: CenterTrackingState): boolean {
+        pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
+        let center_right_tracking = pins.digitalReadPin(DigitalPin.P11);
+        let center_left_tracking = pins.digitalReadPin(DigitalPin.P15);
+        if (center_left_tracking == 0 && center_right_tracking == 0 && state == 0) {
+            return true;
+        }
+        else if (center_left_tracking == 1 && center_right_tracking == 0 && state == 1) {
+            return true;
+        }
+        else if (center_left_tracking == 0 && center_right_tracking == 1 && state == 2) {
+            return true;
+        }
+        else if (center_left_tracking == 1 && center_right_tracking == 1 && state == 3) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    /**
+    * TODO: track one side
+    * @param side Line sensor edge , eg: CenterTrackPins.Left
+    * @param state Line sensor status, eg: TrackState.FindLine
+    */
+    //% subcategory="LineSensor"
+    //% block="Track %side line sensor %state"
+    //% state.fieldEditor="gridpicker" state.fieldOptions.columns=2
+    //% side.fieldEditor="gridpicker" side.fieldOptions.columns=2
+    //% weight=60
+    export function trackstatefun(side: TrackPinsNum, state: TrackState): boolean {
+        pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
+        let center_right_tracking = pins.digitalReadPin(DigitalPin.P11);
+        let center_left_tracking = pins.digitalReadPin(DigitalPin.P15);
+        let side_right_tracking = pins.digitalReadPin(DigitalPin.P6);
+        let side_left_tracking = pins.digitalReadPin(DigitalPin.P7);
+        if (side == 0 && state == 1 && center_left_tracking == 1) {
+            return true;
+        }
+        else if (side == 0 && state == 0 && center_left_tracking == 0) {
+            return true;
+        }
+        else if (side == 1 && state == 1 && center_right_tracking == 1) {
+            return true;
+        }
+        else if (side == 1 && state == 0 && center_right_tracking == 0) {
+            return true;
+        }
+        else if (side == 2 && state == 1 && side_left_tracking == 1) {
+            return true;
+        }
+        else if (side == 2 && state == 0 && side_left_tracking == 0) {
+            return true;
+        }
+        else if (side == 3 && state == 1 && side_right_tracking == 1) {
+            return true;
+        }
+        else if (side == 3 && state == 0 && side_right_tracking == 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    //side
+    /**
+    * Judging the Current Status of Center Tracking Module. 
+    * @param state Four states of Center tracking module, eg: TrackingState.C_L_R_line
+    */
+    //% subcategory="LineSensor"
+    //% block="Side tracking state is %state"
+    //% weight=60
+    export function sidetracking(state: SideTrackingState): boolean {
+        pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
+        let side_right_tracking = pins.digitalReadPin(DigitalPin.P6);
+        let side_left_tracking = pins.digitalReadPin(DigitalPin.P7);
+        if (side_left_tracking == 0 && side_right_tracking == 0 && state == 0) {
+            return true;
+        }
+        else if (side_left_tracking == 1 && side_right_tracking == 0 && state == 1) {
+            return true;
+        }
+        else if (side_left_tracking == 0 && side_right_tracking == 1 && state == 2) {
+            return true;
+        }
+        else if (side_left_tracking == 1 && side_right_tracking == 1 && state == 3) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    ///
+    let distanceBackup: number = 0;
+    /**
+    * Cars can extend the ultrasonic function to prevent collisions and other functions.. 
+    * @param Sonarunit two states of ultrasonic module, eg: Centimeters
+    */
+    //% subcategory="Others"
+    //% block="HC-SR04 Sonar"
+    //% weight=55
+    export function ultrasonic(): number {
+        let duration = 0;
+        let RangeInCentimeters = 0;
+
+        pins.digitalWritePin(DigitalPin.P14, 0);
+        control.waitMicros(2);
+        pins.digitalWritePin(DigitalPin.P14, 1);
+        control.waitMicros(20);
+        pins.digitalWritePin(DigitalPin.P14, 0);
+        duration = pins.pulseIn(DigitalPin.P14, PulseValue.High, 50000); // Max duration 50 ms
+
+        RangeInCentimeters = duration * 153 / 44 / 2 / 100;
+
+        if (RangeInCentimeters > 0) distanceBackup = RangeInCentimeters;
+        else RangeInCentimeters = distanceBackup;
+
+        basic.pause(50);
+
+        return RangeInCentimeters;
+    }
+
+    /**
+    * Cars read brightness on Left and right
+    */
+    //% subcategory="Others"
+    //% block="%num Brightness value"
+    //% weight=55
+    export function brightness(num: BrightnessChoice): number {
+        let mesuBrightness = 0;
+        if (num == 0) {
+            for (let i = 0; i < 6; i++) {
+                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P10);
+                basic.pause(10);
+            }
+            mesuBrightness = Math.round(mesuBrightness / 10);
+        }
+        else if (num == 1) {
+            for (let i = 0; i < 6; i++) {
+                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P3);
+                basic.pause(10);
+            }
+            mesuBrightness = Math.round(mesuBrightness / 10);
+        }
+        return (1024 - mesuBrightness);
+    }
+    /**
+    * TODO: Runs when line sensor finds or loses.
+    */
+    //% subcategory="LineSensor"
+    //% block="On Center %sensor| line %event"
+    //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
+    //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
+    //% weight=50
+    export function trackEventCenter(sensor: CenterTrackPins, event: TrackEvents, handler: Action) {
+        initEvents_center();
+        control.onEvent(<number>sensor, <number>event, handler);
+    }
+
+    /**
+    * TODO: Runs when line sensor finds or loses.
+    */
+    //% subcategory="LineSensor"
+    //% block="On Side %sensor| line %event"
+    //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
+    //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
+    //% weight=50
+    export function trackEventSide(sensor: SideTrackPins, event: TrackEvents, handler: Action) {
+        initEvents_side();
+        control.onEvent(<number>sensor, <number>event, handler);
+    }
+
+    function initEvents_center(): void {
+        if (_initEvents_center) {
+            pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
+            pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
+
+            pins.setEvents(DigitalPin.P11, PinEventType.Edge);
+            pins.setEvents(DigitalPin.P15, PinEventType.Edge);
+            _initEvents_center = false;
+        }
+    }
+
+    function initEvents_side(): void {
+        if (_initEvents_side) {
+            pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
+            pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
+
+            pins.setEvents(DigitalPin.P6, PinEventType.Edge);
+            pins.setEvents(DigitalPin.P7, PinEventType.Edge);
+            _initEvents_side = false;
+        }
+
+    }
+    /**
      * IR receiver
      */
     export namespace background {
@@ -986,497 +1473,6 @@ namespace luckycar {
             return false;
     }
     //
-
-    /**
-     * 小车马达、循迹控制
-     */
-
-    let _initEvents_center = true
-    let _initEvents_side = true
-    /**
-    * Unit of Ultrasound Module
-    */
-    export enum SonarUnit {
-        //% block="cm"
-        Centimeters,
-        //% block="inches"
-        Inches
-    }
-    /**
-    * Select the motor on the left or right
-    */
-    export enum MotorsList {
-        //% blockId="M1" block="M1"
-        M1 = 0,
-        //% blockId="M2" block="M2"
-        M2 = 1
-    }
-
-    export enum Direction {
-        //% block="Forward" enumval=0
-        forward,
-        //% block="Backward" enumval=1
-        backward,
-        //% block="Left" enumval=2
-        left,
-        //% block="Right" enumval=3
-        right
-    }
-
-    /**
-    * Stop modes. Coast or Brake
-    */
-    export enum CarStopMode {
-        //% block="no brake"
-        Coast,
-        //% block="brake"
-        Brake
-    }
-    export enum BrightnessChoice {
-        //% block="Left" enumval=0
-        Left,
-        //% block="Right" enumval=1
-        Right
-    }
-    /**
-     * Pins used to generate events
-     */
-    export enum CenterTrackPins {
-        //% block="Center_Left"
-        Center_Left = EventBusSource.MICROBIT_ID_IO_P15,
-        //% block="Center_Right"
-        Center_Right = EventBusSource.MICROBIT_ID_IO_P11
-    }
-
-    /**
-     * Pins used to generate events
-     */
-    export enum SideTrackPins {
-        //% block="Side_Left"
-        Side_Left = EventBusSource.MICROBIT_ID_IO_P7,
-        //% block="Side_Right"
-        Side_Right = EventBusSource.MICROBIT_ID_IO_P6
-    }
-    /**
-    * Line Sensor events    MICROBIT_PIN_EVT_RISE
-    */
-    export enum TrackEvents {
-        //% block="Found" 
-        FindLine = EventBusValue.MICROBIT_PIN_EVT_FALL,
-        //% block="Lost" 
-        LoseLine = EventBusValue.MICROBIT_PIN_EVT_RISE
-    }
-    /**
-     * Pins used to generate events
-     */
-    export enum TrackPinsNum {
-        //% block="Center_Left"
-        Center_Left = 0,
-        //% block="Center_Right"
-        Center_Right = 1,
-        //% block="Side_Left"
-        Side_Left = 2,
-        //% block="Side_Right"
-        Side_Right = 3
-    }
-    /**
-    * Line Sensor state    
-    */
-    export enum TrackState {
-        //% block="Found" 
-        FindLine = 0,
-        //% block="Lost" 
-        LoseLine = 1
-    }
-
-
-    /**
-    * Status List of Center Tracking Modules
-    */
-    export enum CenterTrackingState {
-        //% block="● ●" enumval=0
-        C_L_R_line,
-
-        //% block="◌ ●" enumval=1
-        C_L_unline_R_line,
-
-        //% block="● ◌" enumval=2
-        C_L_line_R_unline,
-
-        //% block="◌ ◌" enumval=3
-        C_L_R_unline
-    }
-    /**
-    * Status List of Side Tracking Modules
-    */
-    export enum SideTrackingState {
-        //% block="● ●" enumval=0
-        S_L_R_line,
-
-        //% block="◌ ●" enumval=1
-        S_L_unline_R_line,
-
-        //% block="● ◌" enumval=2
-        S_L_line_R_unline,
-
-        //% block="◌ ◌" enumval=3
-        S_L_R_unline
-    }
-
-    /**
-     * TODO: Set the speed of left and right wheels. 
-     * @param lspeed Left wheel speed , eg: 100
-     * @param rspeed Right wheel speed, eg: -100
-     */
-    //% subcategory="Motors"
-    //% block="Set left wheel speed %lspeed\\% |right wheel speed %rspeed\\%"
-    //% lspeed.min=-100 lspeed.max=100
-    //% rspeed.min=-100 rspeed.max=100
-    //% weight=100
-    export function motors(lspeed: number = 50, rspeed: number = 50): void {
-        if (lspeed > 100) {
-            lspeed = 100;
-        } else if (lspeed < -100) {
-            lspeed = -100;
-        }
-        if (rspeed > 100) {
-            rspeed = 100;
-        } else if (rspeed < -100) {
-            rspeed = -100;
-        }
-
-        if (lspeed >= 0) {
-            pins.analogWritePin(AnalogPin.P0, lspeed == 100 ? 1023 : (lspeed * 1024) / 100);
-            pins.digitalWritePin(DigitalPin.P12, 0);
-        }
-        else {
-            lspeed = Math.abs(lspeed);
-            pins.analogWritePin(AnalogPin.P0, ((100 - lspeed) * 1024) / 100);
-            pins.digitalWritePin(DigitalPin.P12, 1);
-        }
-        if (rspeed >= 0) {
-            pins.analogWritePin(AnalogPin.P1, rspeed == 100 ? 1023 : (rspeed * 1024) / 100);
-            pins.digitalWritePin(DigitalPin.P8, 0);
-        }
-        else {
-            rspeed = Math.abs(rspeed);
-            pins.analogWritePin(AnalogPin.P1, ((100 - rspeed) * 1024) / 100);
-            pins.digitalWritePin(DigitalPin.P8, 1);
-        }
-    }
-    /**
-    * TODO: Full speed operation lasts for 10 seconds,speed is 100.
-    * @param dir Driving direction, eg: Direction.forward
-    * @param speed Running speed, eg: 50
-    * @param time Travel time, eg: 5
-    */
-    //% subcategory="Motors"
-    //% block="Go %dir at speed%speed\\% for %time seconds"
-    //% weight=95
-    export function moveTime(dir: Direction, speed: number, time: number): void {
-        if (dir == 0) {
-            motors(speed, speed);
-            basic.pause(time * 1000)
-            motors(0, 0)
-        }
-        if (dir == 1) {
-            motors(-speed, -speed);
-            basic.pause(time * 1000)
-            motors(0, 0)
-        }
-        if (dir == 2) {
-            motors(-speed, speed);
-            basic.pause(time * 1000)
-            motors(0, 0)
-        }
-        if (dir == 3) {
-            motors(speed, -speed);
-            basic.pause(time * 1000)
-            motors(0, 0)
-        }
-    }
-    /**
-    * TODO: full speed move forward,speed is 100.
-    */
-    //% subcategory="Motors"
-    //% block="Go straight at full speed"
-    //% weight=90
-    export function forward(): void {
-        pins.analogWritePin(AnalogPin.P0, 1023);
-        pins.digitalWritePin(DigitalPin.P12, 0);
-
-        pins.analogWritePin(AnalogPin.P1, 1023);
-        pins.digitalWritePin(DigitalPin.P8, 0);
-    }
-
-
-    /**
-    * TODO: full speed move back,speed is -100.
-    */
-    //% subcategory="Motors"
-    //% block="Reverse at full speed"
-    //% weight=85
-    export function backforward(): void {
-        pins.analogWritePin(AnalogPin.P0, 0);
-        pins.digitalWritePin(DigitalPin.P12, 1);
-
-        pins.analogWritePin(AnalogPin.P1, 0);
-        pins.digitalWritePin(DigitalPin.P8, 1);
-
-    }
-    /**
-    * TODO: full speed turnleft.
-    */
-    //% subcategory="Motors"
-    //% block="Turn left at full speed"
-    //% weight=80
-    export function turnleft(): void {
-        pins.analogWritePin(AnalogPin.P0, 1023);
-        pins.digitalWritePin(DigitalPin.P12, 0);
-
-        pins.analogWritePin(AnalogPin.P1, 0);
-        pins.digitalWritePin(DigitalPin.P8, 1);
-    }
-    /**
-    * TODO: full speed turnright.
-    */
-    //% subcategory="Motors"
-    //% block="Turn right at full speed"
-    //% weight=75
-    export function turnright(): void {
-        pins.analogWritePin(AnalogPin.P0, 0);
-        pins.digitalWritePin(DigitalPin.P12, 1);
-
-        pins.analogWritePin(AnalogPin.P1, 1023);
-        pins.digitalWritePin(DigitalPin.P8, 0);
-    }
-    /**
-    * TODO: stopcar
-    */
-    //% subcategory="Motors"
-    //% block="Stop car with %mode"
-    //% weight=70
-    export function stopcar(mode: CarStopMode): void {
-        if (mode == 0)
-             motors(0, 0);
-        else{
-            pins.analogWritePin(AnalogPin.P0, 1023);
-            pins.digitalWritePin(DigitalPin.P12, 1);
-
-            pins.analogWritePin(AnalogPin.P1, 1023);
-            pins.digitalWritePin(DigitalPin.P8, 1);
-        }
-    }
-
-    /**
-    * Judging the Current Status of Center Tracking Module. 
-    * @param state Four states of Center tracking module, eg: TrackingState.C_L_R_line
-    */
-    //% subcategory="LineSensor"
-    //% block="Center tracking state is %state"
-    //% weight=65
-    export function centertracking(state: CenterTrackingState): boolean {
-        pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
-        pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
-        let center_right_tracking = pins.digitalReadPin(DigitalPin.P11);
-        let center_left_tracking = pins.digitalReadPin(DigitalPin.P15);
-        if (center_left_tracking == 0 && center_right_tracking == 0 && state == 0) {
-            return true;
-        }
-        else if (center_left_tracking == 1 && center_right_tracking == 0 && state == 1) {
-            return true;
-        }
-        else if (center_left_tracking == 0 && center_right_tracking == 1 && state == 2) {
-            return true;
-        }
-        else if (center_left_tracking == 1 && center_right_tracking == 1 && state == 3) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    /**
-    * TODO: track one side
-    * @param side Line sensor edge , eg: CenterTrackPins.Left
-    * @param state Line sensor status, eg: TrackState.FindLine
-    */
-    //% subcategory="LineSensor"
-    //% block="Track %side line sensor %state"
-    //% state.fieldEditor="gridpicker" state.fieldOptions.columns=2
-    //% side.fieldEditor="gridpicker" side.fieldOptions.columns=2
-    //% weight=60
-    export function trackstatefun(side: TrackPinsNum, state: TrackState): boolean {
-        pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
-        pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
-        pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
-        pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
-        let center_right_tracking = pins.digitalReadPin(DigitalPin.P11);
-        let center_left_tracking = pins.digitalReadPin(DigitalPin.P15);
-        let side_right_tracking = pins.digitalReadPin(DigitalPin.P6);
-        let side_left_tracking = pins.digitalReadPin(DigitalPin.P7);
-        if (side == 0 && state == 1 && center_left_tracking == 1) {
-            return true;
-        }
-        else if (side == 0 && state == 0 && center_left_tracking == 0) {
-            return true;
-        }
-        else if (side == 1 && state == 1 && center_right_tracking == 1) {
-            return true;
-        }
-        else if (side == 1 && state == 0 && center_right_tracking == 0) {
-            return true;
-        }
-        else if (side == 2 && state == 1 && side_left_tracking == 1) {
-            return true;
-        }
-        else if (side == 2 && state == 0 && side_left_tracking == 0) {
-            return true;
-        }
-        else if (side == 3 && state == 1 && side_right_tracking == 1) {
-            return true;
-        }
-        else if (side == 3 && state == 0 && side_right_tracking == 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    //side
-    /**
-    * Judging the Current Status of Center Tracking Module. 
-    * @param state Four states of Center tracking module, eg: TrackingState.C_L_R_line
-    */
-    //% subcategory="LineSensor"
-    //% block="Side tracking state is %state"
-    //% weight=60
-    export function sidetracking(state: SideTrackingState): boolean {
-        pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
-        pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
-        let side_right_tracking = pins.digitalReadPin(DigitalPin.P6);
-        let side_left_tracking = pins.digitalReadPin(DigitalPin.P7);
-        if (side_left_tracking == 0 && side_right_tracking == 0 && state == 0) {
-            return true;
-        }
-        else if (side_left_tracking == 1 && side_right_tracking == 0 && state == 1) {
-            return true;
-        }
-        else if (side_left_tracking == 0 && side_right_tracking == 1 && state == 2) {
-            return true;
-        }
-        else if (side_left_tracking == 1 && side_right_tracking == 1 && state == 3) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    ///
-    let distanceBackup: number = 0;
-    /**
-    * Cars can extend the ultrasonic function to prevent collisions and other functions.. 
-    * @param Sonarunit two states of ultrasonic module, eg: Centimeters
-    */
-    //% subcategory="Others"
-    //% block="HC-SR04 Sonar"
-    //% weight=55
-    export function ultrasonic(): number {
-        let duration = 0;
-        let RangeInCentimeters = 0;
-        
-        pins.digitalWritePin(DigitalPin.P14, 0);
-        control.waitMicros(2);
-        pins.digitalWritePin(DigitalPin.P14, 1);
-        control.waitMicros(20);
-        pins.digitalWritePin(DigitalPin.P14, 0);
-        duration = pins.pulseIn(DigitalPin.P14, PulseValue.High, 50000); // Max duration 50 ms
-
-        RangeInCentimeters = duration * 153 / 44 / 2 / 100 ;
-               
-        if(RangeInCentimeters > 0) distanceBackup = RangeInCentimeters;
-        else RangeInCentimeters = distanceBackup;
-
-        basic.pause(50);
-        
-        return RangeInCentimeters;
-    }
-
-    /**
-    * Cars read brightness on Left and right
-    */
-    //% subcategory="Others"
-    //% block="%num Brightness value"
-    //% weight=55
-    export function brightness(num: BrightnessChoice): number {
-        let mesuBrightness = 0;
-        if(num == 0)
-        {
-            for(let i = 0;i < 6;i++)
-            {
-                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P10);
-                basic.pause(10);
-            }
-            mesuBrightness = Math.round(mesuBrightness/10);
-        }
-        else if(num == 1)
-        {
-            for (let i = 0; i < 6; i++) {
-                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P3);
-                basic.pause(10);
-            }
-            mesuBrightness = Math.round(mesuBrightness / 10);
-        }
-        return (1024-mesuBrightness);
-    }
-    /**
-    * TODO: Runs when line sensor finds or loses.
-    */
-    //% subcategory="LineSensor"
-    //% block="On Center %sensor| line %event"
-    //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
-    //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
-    //% weight=50
-    export function trackEventCenter(sensor: CenterTrackPins, event: TrackEvents, handler: Action) {
-        initEvents_center();
-        control.onEvent(<number>sensor, <number>event, handler);
-    }
-
-    /**
-    * TODO: Runs when line sensor finds or loses.
-    */
-    //% subcategory="LineSensor"
-    //% block="On Side %sensor| line %event"
-    //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
-    //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
-    //% weight=50
-    export function trackEventSide(sensor: SideTrackPins, event: TrackEvents, handler: Action) {
-        initEvents_side();
-        control.onEvent(<number>sensor, <number>event, handler);
-    }
-
-    function initEvents_center(): void {
-        if (_initEvents_center) {
-            pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
-            pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
-
-            pins.setEvents(DigitalPin.P11, PinEventType.Edge);
-            pins.setEvents(DigitalPin.P15, PinEventType.Edge);
-            _initEvents_center = false;
-        }
-    }
-
-    function initEvents_side(): void {
-        if (_initEvents_side) {
-            pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
-            pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
-
-            pins.setEvents(DigitalPin.P6, PinEventType.Edge);
-            pins.setEvents(DigitalPin.P7, PinEventType.Edge);
-            _initEvents_side = false;
-        }
-        
-    }
 
 
 
