@@ -418,7 +418,7 @@ namespace luckycar {
     * @param pin IR receiver pin, eg: DigitalPin.P0
     * @param protocol IR protocol, eg: IrProtocol.Keyestudio
     */
-    //% subcategory="IR Receiver"
+    //% subcategory="Others"
     //% block="connect IR receiver at pin P2"
     //% pin.fieldEditor="gridpicker"
     //% pin.fieldOptions.columns=4
@@ -462,7 +462,7 @@ namespace luckycar {
        * @param action the trigger action
        * @param handler body code to run when the event is raised
        */
-    //% subcategory="IR Receiver"
+    //% subcategory="Others"
     //% block="on IR button | %button | %action"
     //% button.fieldEditor="gridpicker"
     //% button.fieldOptions.columns=3
