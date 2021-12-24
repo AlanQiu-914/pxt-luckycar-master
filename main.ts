@@ -970,6 +970,7 @@ namespace luckycar {
     /**
     * TODO: find the color
     */
+    //% subcategory="Others"
     //% block="%colorchoice color is find"
     //% weight=1
     export function findcolornum(colorchoice: ColorChoiceValue): boolean {
