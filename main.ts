@@ -1272,7 +1272,8 @@ namespace luckycar {
     * Judging the Current Status of Center Tracking Module. 
     * @param state Four states of Center tracking module, eg: TrackingState.C_L_R_line
     */
-    //% blockId=ringbitcar_center_tracking block="Center tracking state is %state"
+    //% subcategory="LineSensor"
+    //% block="Center tracking state is %state"
     //% weight=65
     export function centertracking(state: CenterTrackingState): boolean {
         pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
@@ -1300,6 +1301,7 @@ namespace luckycar {
     * @param side Line sensor edge , eg: CenterTrackPins.Left
     * @param state Line sensor status, eg: TrackState.FindLine
     */
+    //% subcategory="LineSensor"
     //% block="Track %side line sensor %state"
     //% state.fieldEditor="gridpicker" state.fieldOptions.columns=2
     //% side.fieldEditor="gridpicker" side.fieldOptions.columns=2
@@ -1346,7 +1348,8 @@ namespace luckycar {
     * Judging the Current Status of Center Tracking Module. 
     * @param state Four states of Center tracking module, eg: TrackingState.C_L_R_line
     */
-    //% blockId=ringbitcar_side_tracking block="Side tracking state is %state"
+    //% subcategory="LineSensor"
+    //% block="Side tracking state is %state"
     //% weight=60
     export function sidetracking(state: SideTrackingState): boolean {
         pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
@@ -1375,7 +1378,8 @@ namespace luckycar {
     * Cars can extend the ultrasonic function to prevent collisions and other functions.. 
     * @param Sonarunit two states of ultrasonic module, eg: Centimeters
     */
-    //% blockId=ultrasonic block="HC-SR04 Sonar"
+    //% subcategory="Others"
+    //% block="HC-SR04 Sonar"
     //% weight=55
     export function ultrasonic(): number {
         let duration = 0;
@@ -1401,7 +1405,8 @@ namespace luckycar {
     /**
     * Cars read brightness on Left and right
     */
-    //% blockId=brightness block="%num Brightness value"
+    //% subcategory="Others"
+    //% block="%num Brightness value"
     //% weight=55
     export function brightness(num: BrightnessChoice): number {
         let mesuBrightness = 0;
@@ -1427,6 +1432,7 @@ namespace luckycar {
     /**
     * TODO: Runs when line sensor finds or loses.
     */
+    //% subcategory="LineSensor"
     //% block="On Center %sensor| line %event"
     //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
     //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
@@ -1439,6 +1445,7 @@ namespace luckycar {
     /**
     * TODO: Runs when line sensor finds or loses.
     */
+    //% subcategory="LineSensor"
     //% block="On Side %sensor| line %event"
     //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
     //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
@@ -1447,27 +1454,6 @@ namespace luckycar {
         initEvents_side();
         control.onEvent(<number>sensor, <number>event, handler);
     }
-
-    /**
-     * TODO: Set the angle of servo. 
-     * @param angle angle of servo, eg: 90
-     */
-    //% blockId=luckycar_servo block="Set servo angle to %angle °"
-    //% angle.shadow="protractorPicker"
-    //% weight=45
-    export function setServo(angle: number = 180): void {
-        pins.servoWritePin(AnalogPin.P4, angle)
-    }
-
-    /**
-     * TODO: Set the AudioPin. 
-     */
-    //% blockId=luckycar_AudioPin block="Set AudioPin on P9"
-    //% weight=40
-    export function setAudionPinFixed(): void {
-        pins.setAudioPin(AnalogPin.P13)
-    }
-
 
     function initEvents_center(): void {
         if (_initEvents_center) {
