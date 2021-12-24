@@ -1134,7 +1134,8 @@ namespace luckycar {
         }
 
         //% subcategory="RGB_CTR"
-        //% blockId="neopixel_set_car_all_rgb" block="car rgb show color %rgb=neopixel_colors"
+        //% blockId="neopixel_set_car_all_rgb" block="car rgb show color $rgb"
+        //% rgb.shadow="colorNumberPicker"
         //% blockGap=8
         //% weight=80
         //% parts="neopixel" 
