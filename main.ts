@@ -419,7 +419,6 @@ namespace luckycar {
     * @param protocol IR protocol, eg: IrProtocol.Keyestudio
     */
     //% subcategory="IR Receiver"
-    //% blockId="luckycar_infrared_connect_receiver"
     //% block="connect IR receiver at pin P2"
     //% pin.fieldEditor="gridpicker"
     //% pin.fieldOptions.columns=4
