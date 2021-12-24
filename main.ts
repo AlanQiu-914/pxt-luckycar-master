@@ -480,59 +480,7 @@ namespace luckycar {
         }
     }
     ///
-    let distanceBackup: number = 0;
-    /**
-    * Cars can extend the ultrasonic function to prevent collisions and other functions.. 
-    * @param Sonarunit two states of ultrasonic module, eg: Centimeters
-    */
-    //% subcategory="Others"
-    //% block="HC-SR04 Sonar"
-    //% weight=55
-    export function ultrasonic(): number {
-        let duration = 0;
-        let RangeInCentimeters = 0;
-
-        pins.digitalWritePin(DigitalPin.P14, 0);
-        control.waitMicros(2);
-        pins.digitalWritePin(DigitalPin.P14, 1);
-        control.waitMicros(20);
-        pins.digitalWritePin(DigitalPin.P14, 0);
-        duration = pins.pulseIn(DigitalPin.P14, PulseValue.High, 50000); // Max duration 50 ms
-
-        RangeInCentimeters = duration * 153 / 44 / 2 / 100;
-
-        if (RangeInCentimeters > 0) distanceBackup = RangeInCentimeters;
-        else RangeInCentimeters = distanceBackup;
-
-        basic.pause(50);
-
-        return RangeInCentimeters;
-    }
-
-    /**
-    * Cars read brightness on Left and right
-    */
-    //% subcategory="Others"
-    //% block="%num Brightness value"
-    //% weight=55
-    export function brightness(num: BrightnessChoice): number {
-        let mesuBrightness = 0;
-        if (num == 0) {
-            for (let i = 0; i < 6; i++) {
-                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P10);
-                basic.pause(10);
-            }
-            mesuBrightness = Math.round(mesuBrightness / 10);
-        }
-        else if (num == 1) {
-            for (let i = 0; i < 6; i++) {
-                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P3);
-                basic.pause(10);
-            }
-            mesuBrightness = Math.round(mesuBrightness / 10);
-        }
-        return (1024 - mesuBrightness);
-    }
+    
     /**
     * TODO: Runs when line sensor finds or loses.
     */
@@ -580,6 +528,494 @@ namespace luckycar {
             _initEvents_side = false;
         }
 
+    }
+    /**
+     * RGB灯
+     */
+    export enum RgbNum {
+        //% block="left_front"
+        left_front = 4,
+        //% block="right_front"
+        right_front = 3,
+        //% block="left_dowm"
+        left_dowm = 2,
+        //% block="right_dowm"
+        right_dowm = 1,
+        //% block="front_dowm"
+        front_dowm = 0
+
+    }
+
+    export namespace neopixel {
+        /**
+         * A NeoPixel strip
+         */
+        export class Strip {
+            buf: Buffer;
+            pin: DigitalPin;
+            // TODO: encode as bytes instead of 32bit
+            brightness: number;
+            start: number; // start offset in LED strip
+            _length: number; // number of LEDs
+            _mode: NeoPixelMode;
+            _matrixWidth: number; // number of leds in a matrix - if any
+
+            /**
+             * Shows all LEDs to a given color (range 0-255 for r, g, b).
+             * @param rgb RGB color of the LED
+             */
+            // subcategory="RGB_CTR"
+            // blockId="neopixel_set_strip_color" block="%strip|show color %rgb=neopixel_colors"
+            // strip.defl=strip
+            // weight=85 blockGap=8
+            // parts="neopixel"
+            showColor(rgb: number) {
+                rgb = rgb >> 0;
+                this.setAllRGB(rgb);
+                this.show();
+            }
+
+            /**
+             * Set LED to a given color (range 0-255 for r, g, b).
+             * You need to call ``show`` to make the changes visible.
+             * @param pixeloffset position of the NeoPixel in the strip
+             * @param rgb RGB color of the LED
+             */
+            setPixelColor(pixeloffset: number, rgb: number): void {
+                this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
+            }
+
+            /**
+             * Send all the changes to the strip.
+             */
+            show() {
+                // only supported in beta
+                // ws2812b.setBufferMode(this.pin, this._mode);
+                ws2812b.sendBuffer(this.buf, this.pin);
+            }
+
+            /**
+             * Turn off all LEDs.
+             * You need to call ``show`` to make the changes visible.
+             */
+            clear(): void {
+                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+                this.buf.fill(0, this.start * stride, this._length * stride);
+            }
+
+            /**
+             * Gets the number of pixels declared on the strip
+             */
+            length() {
+                return this._length;
+            }
+
+            /**
+             * Set the brightness of the strip. This flag only applies to future operation.
+             * @param brightness a measure of LED brightness in 0-255. eg: 255
+             */
+            setBrightness(brightness: number): void {
+                this.brightness = brightness & 0xff;
+            }
+
+            /**
+             * Apply brightness to current colors using a quadratic easing function.
+             **/
+            easeBrightness(): void {
+                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+                const br = this.brightness;
+                const buf = this.buf;
+                const end = this.start + this._length;
+                const mid = Math.idiv(this._length, 2);
+                for (let i = this.start; i < end; ++i) {
+                    const k = i - this.start;
+                    const ledoffset = i * stride;
+                    const br = k > mid
+                        ? Math.idiv(255 * (this._length - 1 - k) * (this._length - 1 - k), (mid * mid))
+                        : Math.idiv(255 * k * k, (mid * mid));
+                    const r = (buf[ledoffset + 0] * br) >> 8; buf[ledoffset + 0] = r;
+                    const g = (buf[ledoffset + 1] * br) >> 8; buf[ledoffset + 1] = g;
+                    const b = (buf[ledoffset + 2] * br) >> 8; buf[ledoffset + 2] = b;
+                    if (stride == 4) {
+                        const w = (buf[ledoffset + 3] * br) >> 8; buf[ledoffset + 3] = w;
+                    }
+                }
+            }
+
+            /**
+             * Shift LEDs forward and clear with zeros.
+             * You need to call ``show`` to make the changes visible.
+             * @param offset number of pixels to shift forward, eg: 1
+             */
+            shift(offset: number = 1): void {
+                offset = offset >> 0;
+                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+                this.buf.shift(-offset * stride, this.start * stride, this._length * stride)
+            }
+
+            /**
+             * Rotate LEDs forward.
+             * You need to call ``show`` to make the changes visible.
+             * @param offset number of pixels to rotate forward, eg: 1
+             */
+            rotate(offset: number = 1): void {
+                offset = offset >> 0;
+                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+                this.buf.rotate(-offset * stride, this.start * stride, this._length * stride)
+            }
+
+            /**
+             * Set the pin where the neopixel is connected, defaults to P0.
+             */
+            //% subcategory="RGB_CTR"
+            //% weight=10
+            //% parts="neopixel" 
+            setPin(pin: DigitalPin): void {
+                this.pin = pin;
+                pins.digitalWritePin(this.pin, 0);
+                // don't yield to avoid races on initialization
+            }
+
+            /**
+             * Estimates the electrical current (mA) consumed by the current light configuration.
+             */
+            power(): number {
+                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+                const end = this.start + this._length;
+                let p = 0;
+                for (let i = this.start; i < end; ++i) {
+                    const ledoffset = i * stride;
+                    for (let j = 0; j < stride; ++j) {
+                        p += this.buf[i + j];
+                    }
+                }
+                return Math.idiv(this.length() * 7, 10) /* 0.7mA per neopixel */
+                    + Math.idiv(p * 480, 10000); /* rought approximation */
+            }
+
+            private setBufferRGB(offset: number, red: number, green: number, blue: number): void {
+                if (this._mode === NeoPixelMode.RGB_RGB) {
+                    this.buf[offset + 0] = red;
+                    this.buf[offset + 1] = green;
+                } else {
+                    this.buf[offset + 0] = green;
+                    this.buf[offset + 1] = red;
+                }
+                this.buf[offset + 2] = blue;
+            }
+
+            private setAllRGB(rgb: number) {
+                let red = unpackR(rgb);
+                let green = unpackG(rgb);
+                let blue = unpackB(rgb);
+
+                const br = this.brightness;
+                if (br < 255) {
+                    red = (red * br) >> 8;
+                    green = (green * br) >> 8;
+                    blue = (blue * br) >> 8;
+                }
+                const end = this.start + this._length;
+                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+                for (let i = this.start; i < end; ++i) {
+                    this.setBufferRGB(i * stride, red, green, blue)
+                }
+            }
+            private setAllW(white: number) {
+                if (this._mode !== NeoPixelMode.RGBW)
+                    return;
+
+                let br = this.brightness;
+                if (br < 255) {
+                    white = (white * br) >> 8;
+                }
+                let buf = this.buf;
+                let end = this.start + this._length;
+                for (let i = this.start; i < end; ++i) {
+                    let ledoffset = i * 4;
+                    buf[ledoffset + 3] = white;
+                }
+            }
+            private setPixelRGB(pixeloffset: number, rgb: number): void {
+                if (pixeloffset < 0
+                    || pixeloffset >= this._length)
+                    return;
+
+                let stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+                pixeloffset = (pixeloffset + this.start) * stride;
+
+                let red = unpackR(rgb);
+                let green = unpackG(rgb);
+                let blue = unpackB(rgb);
+
+                let br = this.brightness;
+                if (br < 255) {
+                    red = (red * br) >> 8;
+                    green = (green * br) >> 8;
+                    blue = (blue * br) >> 8;
+                }
+                this.setBufferRGB(pixeloffset, red, green, blue)
+            }
+            private setPixelW(pixeloffset: number, white: number): void {
+                if (this._mode !== NeoPixelMode.RGBW)
+                    return;
+
+                if (pixeloffset < 0
+                    || pixeloffset >= this._length)
+                    return;
+
+                pixeloffset = (pixeloffset + this.start) * 4;
+
+                let br = this.brightness;
+                if (br < 255) {
+                    white = (white * br) >> 8;
+                }
+                let buf = this.buf;
+                buf[pixeloffset + 3] = white;
+            }
+        }
+
+        /**
+         * rgb init DigitalPin.P0, 4 leds,NeoPixelMode.RGB
+         */
+        let carstrip = new Strip();
+        //% subcategory="RGB_CTR"
+        //% block="Car Rgb Init"
+        //% weight=100 blockGap=8
+        //% parts="neopixel"
+        export function car_rgb_init(): void {
+            let stride = 3;
+            carstrip.buf = pins.createBuffer(5 * stride);
+            carstrip.start = 0;
+            carstrip._length = 5;
+            carstrip._mode = NeoPixelMode.RGB || NeoPixelMode.RGB;
+            carstrip._matrixWidth = 0;
+            carstrip.setBrightness(128)
+            carstrip.setPin(DigitalPin.P16)
+        }
+
+        //% subcategory="RGB_CTR"
+        //% block="set car pixel color at %pixeloffset|to $rgb"
+        //% rgb.shadow="colorNumberPicker"
+        //% blockGap=8
+        //% weight=80
+        //% parts="neopixel" 
+        export function setCarPixelColor(pixeloffset: RgbNum, rgb: number): void {
+            carstrip.setPixelColor(pixeloffset >> 0, rgb >> 0);
+            carstrip.show();
+        }
+
+        /**
+        * Set the brightness of the car rgb. This flag only applies to future operation.
+        * @param brightness a measure of LED brightness in 0-255. eg: 255
+        */
+        //% subcategory="RGB_CTR"
+        //% block="set car rgb brightness %brightness" 
+        //% brightness.min=0 brightness.max=255
+        //% blockGap=8
+        //% weight=80
+        //% parts="neopixel" 
+        export function setCarBrightness(brightness: number): void {
+            carstrip.brightness = brightness & 0xff;
+        }
+
+        //% subcategory="RGB_CTR"
+        //% block="car rgb show color $rgb"
+        //% rgb.shadow="colorNumberPicker"
+        //% blockGap=8
+        //% weight=80
+        //% parts="neopixel" 
+        export function setCarRgbAll(rgb: number): void {
+            carstrip.showColor(rgb >> 0);
+        }
+
+        /**
+        * Rotate LEDs forward.
+        * You need to call ``show`` to make the changes visible.
+        * @param offset number of pixels to rotate forward, eg: 1
+        */
+        //% subcategory="RGB_CTR"
+        //% block="car rgb rotate" blockGap=8
+        //% weight=80
+        //% parts="neopixel"
+        export function CarRgbRotate(): void {
+            const stride = carstrip._mode === NeoPixelMode.RGBW ? 4 : 3;
+            carstrip.buf.rotate(-1 * stride, carstrip.start * stride, carstrip._length * stride);
+            carstrip.show();;
+        }
+
+        /**
+         * Converts red, green, blue channels into a RGB color
+         * @param red value of the red channel between 0 and 255. eg: 255
+         * @param green value of the green channel between 0 and 255. eg: 255
+         * @param blue value of the blue channel between 0 and 255. eg: 255
+         */
+        //% subcategory="RGB_CTR"
+        //% weight=1
+        //% block="red %red|green %green|blue %blue"
+        export function rgb(red: number, green: number, blue: number): number {
+            return packRGB(red, green, blue);
+        }
+
+        /**
+         * Gets the RGB value of a known color
+        */
+        // subcategory="RGB_CTR"
+        // weight=2 blockGap=8
+        // blockId="neopixel_colors" block="%color"
+        export function colors(color: number): number {
+            return color;
+        }
+
+        function packRGB(a: number, b: number, c: number): number {
+            return ((a & 0xFF) << 16) | ((b & 0xFF) << 8) | (c & 0xFF);
+        }
+        function unpackR(rgb: number): number {
+            let r = (rgb >> 16) & 0xFF;
+            return r;
+        }
+        function unpackG(rgb: number): number {
+            let g = (rgb >> 8) & 0xFF;
+            return g;
+        }
+        function unpackB(rgb: number): number {
+            let b = (rgb) & 0xFF;
+            return b;
+        }
+
+        /**
+         * Converts a hue saturation luminosity value into a RGB color
+         * @param h hue from 0 to 360
+         * @param s saturation from 0 to 99
+         * @param l luminosity from 0 to 99
+         */
+        // subcategory="RGB_CTR"
+        // blockId=neopixelHSL block="hue %h|saturation %s|luminosity %l"
+        export function hsl(h: number, s: number, l: number): number {
+            h = Math.round(h);
+            s = Math.round(s);
+            l = Math.round(l);
+
+            h = h % 360;
+            s = Math.clamp(0, 99, s);
+            l = Math.clamp(0, 99, l);
+            let c = Math.idiv((((100 - Math.abs(2 * l - 100)) * s) << 8), 10000); //chroma, [0,255]
+            let h1 = Math.idiv(h, 60);//[0,6]
+            let h2 = Math.idiv((h - h1 * 60) * 256, 60);//[0,255]
+            let temp = Math.abs((((h1 % 2) << 8) + h2) - 256);
+            let x = (c * (256 - (temp))) >> 8;//[0,255], second largest component of this color
+            let r$: number;
+            let g$: number;
+            let b$: number;
+            if (h1 == 0) {
+                r$ = c; g$ = x; b$ = 0;
+            } else if (h1 == 1) {
+                r$ = x; g$ = c; b$ = 0;
+            } else if (h1 == 2) {
+                r$ = 0; g$ = c; b$ = x;
+            } else if (h1 == 3) {
+                r$ = 0; g$ = x; b$ = c;
+            } else if (h1 == 4) {
+                r$ = x; g$ = 0; b$ = c;
+            } else if (h1 == 5) {
+                r$ = c; g$ = 0; b$ = x;
+            }
+            let m = Math.idiv((Math.idiv((l * 2 << 8), 100) - c), 2);
+            let r = r$ + m;
+            let g = g$ + m;
+            let b = b$ + m;
+            return packRGB(r, g, b);
+        }
+
+        export enum HueInterpolationDirection {
+            Clockwise,
+            CounterClockwise,
+            Shortest
+        }
+    }
+
+    /**
+    * 小车底部颜色识别
+    */
+    //读光敏电阻数据，取平均值操作
+    function ReadColorValue(count: number): number {
+        let value = 0;
+        for (let i = 0; i < count; i++) {
+            value += pins.analogReadPin(AnalogPin.P2);
+            basic.pause(5);
+        }
+        value = Math.round(value / count);
+        return value;
+    }
+
+
+    //返回色彩值
+    function ColorNum(): number {
+        let num = 0;        //1:red,2:green,3:blue,4:black,5:white
+        let redvalue = 0, greenvalue = 0, bluevalue = 0;
+        let minvalue = 1024, maxvalue = 0;
+        neopixel.setCarBrightness(255);
+
+        //发红光
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Red));
+        redvalue = ReadColorValue(5);
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
+
+        //发绿光
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Green));
+        greenvalue = ReadColorValue(5);
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
+
+        //发蓝光
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Blue));
+        bluevalue = ReadColorValue(5);
+        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
+
+        maxvalue = Math.max(Math.max(redvalue, greenvalue), bluevalue);
+        minvalue = Math.min(Math.min(redvalue, greenvalue), bluevalue);
+
+        if (minvalue > 800)
+            num = 4;
+        else if (maxvalue < 700)
+            num = 5;
+        else if (redvalue == minvalue)
+            num = 1;
+        else if (greenvalue == minvalue)
+            num = 2;
+        else if (bluevalue == minvalue)
+            num = 3;
+
+        return num;
+    }
+
+    export enum ColorChoiceValue {
+        //% block="Red"
+        Red = 1,
+        //% block="Green"
+        Green = 2,
+        //% block="Blue"
+        Blue = 3,
+        //% block="Black"
+        Black = 4,
+        //% block="White"
+        White = 5
+    }
+    /**
+    * TODO: find the color
+    */
+    //% subcategory="Others"
+    //% block="%colorchoice color is find"
+    //% weight=1
+    export function findcolornum(colorchoice: ColorChoiceValue): boolean {
+        let count = 0;
+        for (let i = 0; i < 5; i++) {
+            if (ColorNum() == colorchoice)
+                count++;
+        }
+        if (count > 2)
+            return true;
+        else
+            return false;
     }
     /**
      * IR receiver
@@ -982,498 +1418,61 @@ namespace luckycar {
         }
         return hex;
     }
+    
+    //
+    let distanceBackup: number = 0;
     /**
-     * RGB灯
-     */
-    export enum RgbNum {
-        //% block="left_front"
-        left_front = 4,
-        //% block="right_front"
-        right_front = 3,
-        //% block="left_dowm"
-        left_dowm = 2,
-        //% block="right_dowm"
-        right_dowm = 1,
-        //% block="front_dowm"
-        front_dowm = 0
-
-    }
-
-    export namespace neopixel {
-        /**
-         * A NeoPixel strip
-         */
-        export class Strip {
-            buf: Buffer;
-            pin: DigitalPin;
-            // TODO: encode as bytes instead of 32bit
-            brightness: number;
-            start: number; // start offset in LED strip
-            _length: number; // number of LEDs
-            _mode: NeoPixelMode;
-            _matrixWidth: number; // number of leds in a matrix - if any
-
-            /**
-             * Shows all LEDs to a given color (range 0-255 for r, g, b).
-             * @param rgb RGB color of the LED
-             */
-            // subcategory="RGB_CTR"
-            // blockId="neopixel_set_strip_color" block="%strip|show color %rgb=neopixel_colors"
-            // strip.defl=strip
-            // weight=85 blockGap=8
-            // parts="neopixel"
-            showColor(rgb: number) {
-                rgb = rgb >> 0;
-                this.setAllRGB(rgb);
-                this.show();
-            }
-
-            /**
-             * Set LED to a given color (range 0-255 for r, g, b).
-             * You need to call ``show`` to make the changes visible.
-             * @param pixeloffset position of the NeoPixel in the strip
-             * @param rgb RGB color of the LED
-             */
-            setPixelColor(pixeloffset: number, rgb: number): void {
-                this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
-            }
-            
-            /**
-             * Send all the changes to the strip.
-             */
-            show() {
-                // only supported in beta
-                // ws2812b.setBufferMode(this.pin, this._mode);
-                ws2812b.sendBuffer(this.buf, this.pin);
-            }
-
-            /**
-             * Turn off all LEDs.
-             * You need to call ``show`` to make the changes visible.
-             */
-            clear(): void {
-                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-                this.buf.fill(0, this.start * stride, this._length * stride);
-            }
-
-            /**
-             * Gets the number of pixels declared on the strip
-             */
-            length() {
-                return this._length;
-            }
-
-            /**
-             * Set the brightness of the strip. This flag only applies to future operation.
-             * @param brightness a measure of LED brightness in 0-255. eg: 255
-             */
-            setBrightness(brightness: number): void {
-                this.brightness = brightness & 0xff;
-            }
-
-            /**
-             * Apply brightness to current colors using a quadratic easing function.
-             **/
-            easeBrightness(): void {
-                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-                const br = this.brightness;
-                const buf = this.buf;
-                const end = this.start + this._length;
-                const mid = Math.idiv(this._length, 2);
-                for (let i = this.start; i < end; ++i) {
-                    const k = i - this.start;
-                    const ledoffset = i * stride;
-                    const br = k > mid
-                        ? Math.idiv(255 * (this._length - 1 - k) * (this._length - 1 - k), (mid * mid))
-                        : Math.idiv(255 * k * k, (mid * mid));
-                    const r = (buf[ledoffset + 0] * br) >> 8; buf[ledoffset + 0] = r;
-                    const g = (buf[ledoffset + 1] * br) >> 8; buf[ledoffset + 1] = g;
-                    const b = (buf[ledoffset + 2] * br) >> 8; buf[ledoffset + 2] = b;
-                    if (stride == 4) {
-                        const w = (buf[ledoffset + 3] * br) >> 8; buf[ledoffset + 3] = w;
-                    }
-                }
-            }
-
-            /**
-             * Shift LEDs forward and clear with zeros.
-             * You need to call ``show`` to make the changes visible.
-             * @param offset number of pixels to shift forward, eg: 1
-             */
-            shift(offset: number = 1): void {
-                offset = offset >> 0;
-                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-                this.buf.shift(-offset * stride, this.start * stride, this._length * stride)
-            }
-
-            /**
-             * Rotate LEDs forward.
-             * You need to call ``show`` to make the changes visible.
-             * @param offset number of pixels to rotate forward, eg: 1
-             */
-            rotate(offset: number = 1): void {
-                offset = offset >> 0;
-                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-                this.buf.rotate(-offset * stride, this.start * stride, this._length * stride)
-            }
-
-            /**
-             * Set the pin where the neopixel is connected, defaults to P0.
-             */
-            //% subcategory="RGB_CTR"
-            //% weight=10
-            //% parts="neopixel" 
-            setPin(pin: DigitalPin): void {
-                this.pin = pin;
-                pins.digitalWritePin(this.pin, 0);
-                // don't yield to avoid races on initialization
-            }
-
-            /**
-             * Estimates the electrical current (mA) consumed by the current light configuration.
-             */
-            power(): number {
-                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-                const end = this.start + this._length;
-                let p = 0;
-                for (let i = this.start; i < end; ++i) {
-                    const ledoffset = i * stride;
-                    for (let j = 0; j < stride; ++j) {
-                        p += this.buf[i + j];
-                    }
-                }
-                return Math.idiv(this.length() * 7, 10) /* 0.7mA per neopixel */
-                    + Math.idiv(p * 480, 10000); /* rought approximation */
-            }
-
-            private setBufferRGB(offset: number, red: number, green: number, blue: number): void {
-                if (this._mode === NeoPixelMode.RGB_RGB) {
-                    this.buf[offset + 0] = red;
-                    this.buf[offset + 1] = green;
-                } else {
-                    this.buf[offset + 0] = green;
-                    this.buf[offset + 1] = red;
-                }
-                this.buf[offset + 2] = blue;
-            }
-
-            private setAllRGB(rgb: number) {
-                let red = unpackR(rgb);
-                let green = unpackG(rgb);
-                let blue = unpackB(rgb);
-
-                const br = this.brightness;
-                if (br < 255) {
-                    red = (red * br) >> 8;
-                    green = (green * br) >> 8;
-                    blue = (blue * br) >> 8;
-                }
-                const end = this.start + this._length;
-                const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-                for (let i = this.start; i < end; ++i) {
-                    this.setBufferRGB(i * stride, red, green, blue)
-                }
-            }
-            private setAllW(white: number) {
-                if (this._mode !== NeoPixelMode.RGBW)
-                    return;
-
-                let br = this.brightness;
-                if (br < 255) {
-                    white = (white * br) >> 8;
-                }
-                let buf = this.buf;
-                let end = this.start + this._length;
-                for (let i = this.start; i < end; ++i) {
-                    let ledoffset = i * 4;
-                    buf[ledoffset + 3] = white;
-                }
-            }
-            private setPixelRGB(pixeloffset: number, rgb: number): void {
-                if (pixeloffset < 0
-                    || pixeloffset >= this._length)
-                    return;
-
-                let stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-                pixeloffset = (pixeloffset + this.start) * stride;
-
-                let red = unpackR(rgb);
-                let green = unpackG(rgb);
-                let blue = unpackB(rgb);
-
-                let br = this.brightness;
-                if (br < 255) {
-                    red = (red * br) >> 8;
-                    green = (green * br) >> 8;
-                    blue = (blue * br) >> 8;
-                }
-                this.setBufferRGB(pixeloffset, red, green, blue)
-            }
-            private setPixelW(pixeloffset: number, white: number): void {
-                if (this._mode !== NeoPixelMode.RGBW)
-                    return;
-
-                if (pixeloffset < 0
-                    || pixeloffset >= this._length)
-                    return;
-
-                pixeloffset = (pixeloffset + this.start) * 4;
-
-                let br = this.brightness;
-                if (br < 255) {
-                    white = (white * br) >> 8;
-                }
-                let buf = this.buf;
-                buf[pixeloffset + 3] = white;
-            }
-        }
-
-        /**
-         * rgb init DigitalPin.P0, 4 leds,NeoPixelMode.RGB
-         */
-        let carstrip = new Strip();
-        //% subcategory="RGB_CTR"
-        //% block="Car Rgb Init"
-        //% weight=100 blockGap=8
-        //% parts="neopixel"
-        export function car_rgb_init(): void {
-            let stride = 3;
-            carstrip.buf = pins.createBuffer(5 * stride);
-            carstrip.start = 0;
-            carstrip._length = 5;
-            carstrip._mode = NeoPixelMode.RGB || NeoPixelMode.RGB;
-            carstrip._matrixWidth = 0;
-            carstrip.setBrightness(128)
-            carstrip.setPin(DigitalPin.P16)
-        }
-
-        //% subcategory="RGB_CTR"
-        //% block="set car pixel color at %pixeloffset|to $rgb"
-        //% rgb.shadow="colorNumberPicker"
-        //% blockGap=8
-        //% weight=80
-        //% parts="neopixel" 
-        export function setCarPixelColor(pixeloffset: RgbNum, rgb: number): void {
-            carstrip.setPixelColor(pixeloffset >> 0, rgb >> 0);
-            carstrip.show();
-        }
-
-        /**
-        * Set the brightness of the car rgb. This flag only applies to future operation.
-        * @param brightness a measure of LED brightness in 0-255. eg: 255
-        */
-        //% subcategory="RGB_CTR"
-        //% block="set car rgb brightness %brightness" 
-        //% brightness.min=0 brightness.max=255
-        //% blockGap=8
-        //% weight=80
-        //% parts="neopixel" 
-        export function setCarBrightness(brightness: number): void {
-            carstrip.brightness = brightness & 0xff;
-        }
-
-        //% subcategory="RGB_CTR"
-        //% block="car rgb show color $rgb"
-        //% rgb.shadow="colorNumberPicker"
-        //% blockGap=8
-        //% weight=80
-        //% parts="neopixel" 
-        export function setCarRgbAll(rgb: number): void {
-            carstrip.showColor(rgb >> 0);
-        }
-
-        /**
-        * Rotate LEDs forward.
-        * You need to call ``show`` to make the changes visible.
-        * @param offset number of pixels to rotate forward, eg: 1
-        */
-        //% subcategory="RGB_CTR"
-        //% block="car rgb rotate" blockGap=8
-        //% weight=80
-        //% parts="neopixel"
-        export function CarRgbRotate(): void {
-            const stride = carstrip._mode === NeoPixelMode.RGBW ? 4 : 3;
-            carstrip.buf.rotate(-1 * stride, carstrip.start * stride, carstrip._length * stride);
-            carstrip.show();;
-        }
-
-        /**
-         * Converts red, green, blue channels into a RGB color
-         * @param red value of the red channel between 0 and 255. eg: 255
-         * @param green value of the green channel between 0 and 255. eg: 255
-         * @param blue value of the blue channel between 0 and 255. eg: 255
-         */
-        //% subcategory="RGB_CTR"
-        //% weight=1
-        //% block="red %red|green %green|blue %blue"
-        export function rgb(red: number, green: number, blue: number): number {
-            return packRGB(red, green, blue);
-        }
-
-        /**
-         * Gets the RGB value of a known color
-        */
-        // subcategory="RGB_CTR"
-        // weight=2 blockGap=8
-        // blockId="neopixel_colors" block="%color"
-        export function colors(color: number): number {
-            return color;
-        }
-        
-        function packRGB(a: number, b: number, c: number): number {
-            return ((a & 0xFF) << 16) | ((b & 0xFF) << 8) | (c & 0xFF);
-        }
-        function unpackR(rgb: number): number {
-            let r = (rgb >> 16) & 0xFF;
-            return r;
-        }
-        function unpackG(rgb: number): number {
-            let g = (rgb >> 8) & 0xFF;
-            return g;
-        }
-        function unpackB(rgb: number): number {
-            let b = (rgb) & 0xFF;
-            return b;
-        }
-
-        /**
-         * Converts a hue saturation luminosity value into a RGB color
-         * @param h hue from 0 to 360
-         * @param s saturation from 0 to 99
-         * @param l luminosity from 0 to 99
-         */
-        // subcategory="RGB_CTR"
-        // blockId=neopixelHSL block="hue %h|saturation %s|luminosity %l"
-        export function hsl(h: number, s: number, l: number): number {
-            h = Math.round(h);
-            s = Math.round(s);
-            l = Math.round(l);
-
-            h = h % 360;
-            s = Math.clamp(0, 99, s);
-            l = Math.clamp(0, 99, l);
-            let c = Math.idiv((((100 - Math.abs(2 * l - 100)) * s) << 8), 10000); //chroma, [0,255]
-            let h1 = Math.idiv(h, 60);//[0,6]
-            let h2 = Math.idiv((h - h1 * 60) * 256, 60);//[0,255]
-            let temp = Math.abs((((h1 % 2) << 8) + h2) - 256);
-            let x = (c * (256 - (temp))) >> 8;//[0,255], second largest component of this color
-            let r$: number;
-            let g$: number;
-            let b$: number;
-            if (h1 == 0) {
-                r$ = c; g$ = x; b$ = 0;
-            } else if (h1 == 1) {
-                r$ = x; g$ = c; b$ = 0;
-            } else if (h1 == 2) {
-                r$ = 0; g$ = c; b$ = x;
-            } else if (h1 == 3) {
-                r$ = 0; g$ = x; b$ = c;
-            } else if (h1 == 4) {
-                r$ = x; g$ = 0; b$ = c;
-            } else if (h1 == 5) {
-                r$ = c; g$ = 0; b$ = x;
-            }
-            let m = Math.idiv((Math.idiv((l * 2 << 8), 100) - c), 2);
-            let r = r$ + m;
-            let g = g$ + m;
-            let b = b$ + m;
-            return packRGB(r, g, b);
-        }
-
-        export enum HueInterpolationDirection {
-            Clockwise,
-            CounterClockwise,
-            Shortest
-        }
-    }
-
-    /**
-    * 小车底部颜色识别
-    */
-    //读光敏电阻数据，取平均值操作
-    function ReadColorValue(count:number):number{
-        let value = 0;
-        for(let i=0;i<count;i++)
-        {
-            value += pins.analogReadPin(AnalogPin.P2);
-            basic.pause(5);
-        }
-        value = Math.round(value/count);
-        return value;
-    }
-
-
-    //返回色彩值
-    function ColorNum():number{
-        let num = 0;        //1:red,2:green,3:blue,4:black,5:white
-        let redvalue=0,greenvalue=0,bluevalue=0;
-        let minvalue=1024,maxvalue=0;
-        neopixel.setCarBrightness(255);
-
-        //发红光
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Red));
-        redvalue = ReadColorValue(5);
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
-
-        //发绿光
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Green));
-        greenvalue = ReadColorValue(5);
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
-
-        //发蓝光
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Blue));
-        bluevalue = ReadColorValue(5);
-        neopixel.setCarPixelColor(luckycar.RgbNum.front_dowm, luckycar.neopixel.colors(NeoPixelColors.Black));
-
-        maxvalue = Math.max(Math.max(redvalue, greenvalue),bluevalue);
-        minvalue = Math.min(Math.min(redvalue, greenvalue), bluevalue);
-
-        if (minvalue > 800)
-            num = 4;
-        else if (maxvalue < 700)
-            num = 5;
-        else if (redvalue == minvalue)
-            num = 1;
-        else if (greenvalue == minvalue)
-            num = 2;
-        else if (bluevalue == minvalue)
-            num = 3;
-
-        return num;
-    }
-
-    export enum ColorChoiceValue {
-        //% block="Red"
-        Red = 1,
-        //% block="Green"
-        Green = 2,
-        //% block="Blue"
-        Blue = 3,
-        //% block="Black"
-        Black = 4,
-        //% block="White"
-        White = 5
-    }
-    /**
-    * TODO: find the color
+    * Cars can extend the ultrasonic function to prevent collisions and other functions.. 
+    * @param Sonarunit two states of ultrasonic module, eg: Centimeters
     */
     //% subcategory="Others"
-    //% block="%colorchoice color is find"
-    //% weight=1
-    export function findcolornum(colorchoice: ColorChoiceValue): boolean {
-        let count = 0;
-        for(let i=0;i<5;i++)
-        {
-            if (ColorNum() == colorchoice)
-                count++;
-        }
-        if (count > 2)
-            return true;
-        else
-            return false;
-    }
-    //
+    //% block="HC-SR04 Sonar"
+    //% weight=55
+    export function ultrasonic(): number {
+        let duration = 0;
+        let RangeInCentimeters = 0;
 
+        pins.digitalWritePin(DigitalPin.P14, 0);
+        control.waitMicros(2);
+        pins.digitalWritePin(DigitalPin.P14, 1);
+        control.waitMicros(20);
+        pins.digitalWritePin(DigitalPin.P14, 0);
+        duration = pins.pulseIn(DigitalPin.P14, PulseValue.High, 50000); // Max duration 50 ms
+
+        RangeInCentimeters = duration * 153 / 44 / 2 / 100;
+
+        if (RangeInCentimeters > 0) distanceBackup = RangeInCentimeters;
+        else RangeInCentimeters = distanceBackup;
+
+        basic.pause(50);
+
+        return RangeInCentimeters;
+    }
+
+    /**
+    * Cars read brightness on Left and right
+    */
+    //% subcategory="Others"
+    //% block="%num Brightness value"
+    //% weight=55
+    export function brightness(num: BrightnessChoice): number {
+        let mesuBrightness = 0;
+        if (num == 0) {
+            for (let i = 0; i < 6; i++) {
+                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P10);
+                basic.pause(10);
+            }
+            mesuBrightness = Math.round(mesuBrightness / 10);
+        }
+        else if (num == 1) {
+            for (let i = 0; i < 6; i++) {
+                mesuBrightness = mesuBrightness + pins.analogReadPin(AnalogPin.P3);
+                basic.pause(10);
+            }
+            mesuBrightness = Math.round(mesuBrightness / 10);
+        }
+        return (1024 - mesuBrightness);
+    }
 
 
 }
