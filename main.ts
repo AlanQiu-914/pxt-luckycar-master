@@ -1128,7 +1128,8 @@ namespace luckycar {
      * @param lspeed Left wheel speed , eg: 100
      * @param rspeed Right wheel speed, eg: -100
      */
-    //% blockId=MotorRun block="Set left wheel speed %lspeed\\% |right wheel speed %rspeed\\%"
+    //% subcategory="Motors"
+    //% block="Set left wheel speed %lspeed\\% |right wheel speed %rspeed\\%"
     //% lspeed.min=-100 lspeed.max=100
     //% rspeed.min=-100 rspeed.max=100
     //% weight=100
@@ -1169,7 +1170,8 @@ namespace luckycar {
     * @param speed Running speed, eg: 50
     * @param time Travel time, eg: 5
     */
-    //% blockId=luckycar_move_time block="Go %dir at speed%speed\\% for %time seconds"
+    //% subcategory="Motors"
+    //% block="Go %dir at speed%speed\\% for %time seconds"
     //% weight=95
     export function moveTime(dir: Direction, speed: number, time: number): void {
         if (dir == 0) {
@@ -1196,7 +1198,8 @@ namespace luckycar {
     /**
     * TODO: full speed move forward,speed is 100.
     */
-    //% blockId=Luckyebot_forward block="Go straight at full speed"
+    //% subcategory="Motors"
+    //% block="Go straight at full speed"
     //% weight=90
     export function forward(): void {
         pins.analogWritePin(AnalogPin.P0, 1023);
@@ -1210,7 +1213,8 @@ namespace luckycar {
     /**
     * TODO: full speed move back,speed is -100.
     */
-    //% blockId=luckycar_back block="Reverse at full speed"
+    //% subcategory="Motors"
+    //% block="Reverse at full speed"
     //% weight=85
     export function backforward(): void {
         pins.analogWritePin(AnalogPin.P0, 0);
@@ -1223,7 +1227,8 @@ namespace luckycar {
     /**
     * TODO: full speed turnleft.
     */
-    //% blockId=luckycar_left block="Turn left at full speed"
+    //% subcategory="Motors"
+    //% block="Turn left at full speed"
     //% weight=80
     export function turnleft(): void {
         pins.analogWritePin(AnalogPin.P0, 1023);
@@ -1235,7 +1240,8 @@ namespace luckycar {
     /**
     * TODO: full speed turnright.
     */
-    //% blockId=luckycar_right block="Turn right at full speed"
+    //% subcategory="Motors"
+    //% block="Turn right at full speed"
     //% weight=75
     export function turnright(): void {
         pins.analogWritePin(AnalogPin.P0, 0);
@@ -1247,7 +1253,8 @@ namespace luckycar {
     /**
     * TODO: stopcar
     */
-    //% blockId=luckycar_stopcar block="Stop car with %mode"
+    //% subcategory="Motors"
+    //% block="Stop car with %mode"
     //% weight=70
     export function stopcar(mode: CarStopMode): void {
         if (mode == 0)
