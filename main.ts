@@ -547,12 +547,6 @@ namespace luckycar {
              * @param pixeloffset position of the NeoPixel in the strip
              * @param rgb RGB color of the LED
              */
-            // subcategory="RGB_CTR"
-            // block="%strip|set pixel color at %pixeloffset|to %rgb=neopixel_colors"
-            // strip.defl=strip
-            // blockGap=8
-            // weight=80
-            // parts="neopixel" advanced=true
             setPixelColor(pixeloffset: number, rgb: number): void {
                 this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
             }
