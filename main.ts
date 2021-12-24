@@ -463,7 +463,6 @@ namespace luckycar {
        * @param handler body code to run when the event is raised
        */
     //% subcategory="IR Receiver"
-    //% blockId=luckycar_infrared_on_ir_button
     //% block="on IR button | %button | %action"
     //% button.fieldEditor="gridpicker"
     //% button.fieldOptions.columns=3
