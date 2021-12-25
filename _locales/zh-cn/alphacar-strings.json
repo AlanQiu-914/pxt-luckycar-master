@@ -1,9 +1,3 @@
 {
-    "AlphaCar.Direction.backward|block": "后退",
-    "AlphaCar.Direction.forward|block": "前进",
-    "AlphaCar.Direction.left|block": "左转",
-    "AlphaCar.Direction.right|block": "右转",
-    "AlphaCar.BrightnessChoice.Left|block":"左侧",
-    "AlphaCar.BrightnessChoice.Right|block": "右侧",
     "{id:subcategory}Motors": "电机"
 }
