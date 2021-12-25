@@ -254,7 +254,8 @@ namespace AlphaCar {
         }
 
         if (lspeed >= 0) {
-            lspeed = 0.84 * lspeed+15.16;
+            if (lspeed != 0)
+                lspeed = 0.84 * lspeed+15.16;
             pins.analogWritePin(AnalogPin.P0, lspeed == 100 ? 1023 : (lspeed * 1023) / 100);
             pins.digitalWritePin(DigitalPin.P12, 0);
         }
@@ -265,7 +266,8 @@ namespace AlphaCar {
             pins.digitalWritePin(DigitalPin.P12, 1);
         }
         if (rspeed >= 0) {
-            rspeed = 0.84 * rspeed + 15.16;
+            if (rspeed != 0)
+                rspeed = 0.84 * rspeed + 15.16;
             pins.analogWritePin(AnalogPin.P1, rspeed == 100 ? 1023 : (rspeed * 1023) / 100);
             pins.digitalWritePin(DigitalPin.P8, 0);
         }
