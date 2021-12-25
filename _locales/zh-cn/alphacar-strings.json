@@ -1,3 +1,4 @@
 {
-    "{id:subcategory}Motors": "电机"
+  "AlphaCar.Direction.backward|block": "后退",
+  "AlphaCar.Direction.forward|block": "前进"
 }
