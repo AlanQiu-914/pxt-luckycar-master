@@ -101,15 +101,7 @@ namespace AlphaCar {
 
     let _initEvents_center = true
     let _initEvents_side = true
-    /**
-    * Unit of Ultrasound Module
-    */
-    export enum SonarUnit {
-        //% block="cm"
-        Centimeters,
-        //% block="inches"
-        Inches
-    }
+
     /**
     * Select the motor on the left or right
     */
@@ -1438,7 +1430,6 @@ namespace AlphaCar {
     let distanceBackup: number = 0;
     /**
     * Cars can extend the ultrasonic function to prevent collisions and other functions.. 
-    * @param Sonarunit two states of ultrasonic module, eg: Centimeters
     */
     //% subcategory="Others"
     //% block="HC-SR04 Sonar"
