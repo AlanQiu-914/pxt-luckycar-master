@@ -1397,7 +1397,7 @@ namespace AlphaCar {
     //% button.fieldEditor="gridpicker"
     //% button.fieldOptions.columns=3
     //% button.fieldOptions.tooltips="false"
-    //% weight=50
+    //% weight=85
     export function onIrButton(
         button: IrButton,
         action: IrButtonAction,
