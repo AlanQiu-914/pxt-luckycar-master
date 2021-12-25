@@ -4,6 +4,5 @@
   "AlphaCar.Direction.left|block": "左转",
   "AlphaCar.Direction.right|block": "右转",
   "AlphaCar.forward|block": "全速前进",
-  "AlphaCar|block": "阿尔法小车",
-  "{id:category}AlphaCar": "阿尔法小车"
+  "AlphaCar|block": "阿尔法小车"
 }
