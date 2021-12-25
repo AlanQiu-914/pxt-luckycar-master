@@ -1,4 +1,6 @@
 {
   "AlphaCar.Direction.backward|block": "后退",
-  "AlphaCar.Direction.forward|block": "前进"
+  "AlphaCar.Direction.forward|block": "前进",
+  "AlphaCar.Direction.left|block": "左转",
+  "AlphaCar.Direction.right|block": "右转"
 }
