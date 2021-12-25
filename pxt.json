@@ -12,6 +12,7 @@
         "main.blocks",
         "main.ts",
         "test.ts",
+         "_locales/zh-CN/alphacar-strings.json",
         "tsconfig.json"
     ],
     "targetVersions": {
