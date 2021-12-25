@@ -254,21 +254,25 @@ namespace AlphaCar {
         }
 
         if (lspeed >= 0) {
-            pins.analogWritePin(AnalogPin.P0, lspeed == 100 ? 1023 : (lspeed * 1024) / 100);
+            lspeed = 0.84 * lspeed+15.16;
+            pins.analogWritePin(AnalogPin.P0, lspeed == 100 ? 1023 : (lspeed * 1023) / 100);
             pins.digitalWritePin(DigitalPin.P12, 0);
         }
         else {
             lspeed = Math.abs(lspeed);
-            pins.analogWritePin(AnalogPin.P0, ((100 - lspeed) * 1024) / 100);
+            lspeed = 0.75 * lspeed + 24.25;
+            pins.analogWritePin(AnalogPin.P0, ((100 - lspeed) * 1023) / 100);
             pins.digitalWritePin(DigitalPin.P12, 1);
         }
         if (rspeed >= 0) {
-            pins.analogWritePin(AnalogPin.P1, rspeed == 100 ? 1023 : (rspeed * 1024) / 100);
+            rspeed = 0.84 * rspeed + 15.16;
+            pins.analogWritePin(AnalogPin.P1, rspeed == 100 ? 1023 : (rspeed * 1023) / 100);
             pins.digitalWritePin(DigitalPin.P8, 0);
         }
         else {
             rspeed = Math.abs(rspeed);
-            pins.analogWritePin(AnalogPin.P1, ((100 - rspeed) * 1024) / 100);
+            rspeed = 0.75 * rspeed + 24.25;
+            pins.analogWritePin(AnalogPin.P1, ((100 - rspeed) * 1023) / 100);
             pins.digitalWritePin(DigitalPin.P8, 1);
         }
     }
