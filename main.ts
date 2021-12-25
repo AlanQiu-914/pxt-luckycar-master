@@ -236,7 +236,7 @@ namespace AlphaCar {
      * @param lspeed Left wheel speed , eg: 100
      * @param rspeed Right wheel speed, eg: -100
      */
-    //% subcategory="Motors"
+    // subcategory="Motors"
     //% block="Set left wheel speed %lspeed\\% |right wheel speed %rspeed\\%"
     //% lspeed.min=-100 lspeed.max=100
     //% rspeed.min=-100 rspeed.max=100
@@ -284,7 +284,7 @@ namespace AlphaCar {
     * @param speed Running speed, eg: 50
     * @param time Travel time, eg: 5
     */
-    //% subcategory="Motors"
+    // subcategory="Motors"
     //% block="Go %dir at speed%speed\\% for %time seconds"
     //% weight=95
     export function moveTime(dir: Direction, speed: number, time: number): void {
@@ -312,7 +312,7 @@ namespace AlphaCar {
     /**
     * TODO: full speed move forward,speed is 100.
     */
-    //% subcategory="Motors"
+    // subcategory="Motors"
     //% block="Go straight at full speed"
     //% weight=90
     export function forward(): void {
@@ -327,7 +327,7 @@ namespace AlphaCar {
     /**
     * TODO: full speed move back,speed is -100.
     */
-    //% subcategory="Motors"
+    // subcategory="Motors"
     //% block="Reverse at full speed"
     //% weight=85
     export function backforward(): void {
@@ -341,7 +341,7 @@ namespace AlphaCar {
     /**
     * TODO: full speed turnleft.
     */
-    //% subcategory="Motors"
+    // subcategory="Motors"
     //% block="Turn left at full speed"
     //% weight=80
     export function turnleft(): void {
@@ -354,7 +354,7 @@ namespace AlphaCar {
     /**
     * TODO: full speed turnright.
     */
-    //% subcategory="Motors"
+    // subcategory="Motors"
     //% block="Turn right at full speed"
     //% weight=75
     export function turnright(): void {
@@ -367,7 +367,7 @@ namespace AlphaCar {
     /**
     * TODO: stopcar
     */
-    //% subcategory="Motors"
+    // subcategory="Motors"
     //% block="Stop car with %mode"
     //% weight=70
     export function stopcar(mode: CarStopMode): void {
