@@ -6,14 +6,8 @@
         "ws2812b": "github:microsoft/pxt-ws2812b#v0.1.1"
     },
     "files": [
-        ".vscode/settings.json",
-        ".vscode/tasks.json",
-        "README.md",
-        "main.blocks",
         "main.ts",
-        "test.ts",
-        "_locales/zh-cn/alphacar-strings.json",
-        "tsconfig.json"
+        "_locales/zh-cn/alphacar-strings.json"
     ],
     "targetVersions": {
         "target": "4.0.16",
