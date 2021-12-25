@@ -787,6 +787,9 @@ namespace AlphaCar {
          * DigitalPin.P0, 4 leds,NeoPixelMode.RGB
          */
         let carstrip = new Strip();
+        /**
+         * Rgb init.
+         */
         //% subcategory="RGB_CTR"
         //% block="Car Rgb Init"
         //% weight=100 blockGap=8
@@ -844,7 +847,6 @@ namespace AlphaCar {
 
         /**
         * Rotate LEDs forward.
-        * You need to call ``show`` to make the changes visible
         * @param offset number of pixels to rotate forward, eg: 1
         */
         //% subcategory="RGB_CTR"
