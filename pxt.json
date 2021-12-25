@@ -1,5 +1,5 @@
 {
-    "name": "pxt-luckycar-master",
+    "name": "AlphaCar",
     "dependencies": {
         "core": "*",
         "microphone": "*",
