@@ -459,8 +459,8 @@ namespace AlphaCar {
     }
     //side
     /**
-    * Judging the Current Status of Center Tracking Module. 
-    * @param state Four states of Center tracking module, eg: TrackingState.C_L_R_line
+    * Judging the Current Status of Side Tracking Module. 
+    * @param state Four states of Side tracking module, eg: TrackingState.C_L_R_line
     */
     //% subcategory="LineSensor"
     //% block="Side tracking state is %state"
@@ -489,7 +489,7 @@ namespace AlphaCar {
     ///
     
     /**
-    * TODO: Runs when line sensor finds or loses.
+    * TODO: Runs when center line sensor finds or loses.
     */
     //% subcategory="LineSensor"
     //% block="On Center %sensor| line %event"
@@ -502,7 +502,7 @@ namespace AlphaCar {
     }
 
     /**
-    * TODO: Runs when line sensor finds or loses.
+    * TODO: Runs when side line sensor finds or loses.
     */
     //% subcategory="LineSensor"
     //% block="On Side %sensor| line %event"
@@ -662,7 +662,7 @@ namespace AlphaCar {
 
             /**
              * Rotate LEDs forward.
-             * You need to call ``show`` to make the changes visible.
+             * You need to call ``show`` to make the changes visible
              * @param offset number of pixels to rotate forward, eg: 1
              */
             rotate(offset: number = 1): void {
@@ -783,7 +783,8 @@ namespace AlphaCar {
         }
 
         /**
-         * rgb init DigitalPin.P0, 4 leds,NeoPixelMode.RGB
+         * rgb init. 
+         * DigitalPin.P0, 4 leds,NeoPixelMode.RGB
          */
         let carstrip = new Strip();
         //% subcategory="RGB_CTR"
@@ -800,7 +801,9 @@ namespace AlphaCar {
             carstrip.setBrightness(128)
             carstrip.setPin(DigitalPin.P16)
         }
-
+        /**
+         * Set each RGB color.
+         */
         //% subcategory="RGB_CTR"
         //% block="set car pixel color at %pixeloffset|to $rgb"
         //% rgb.shadow="colorNumberPicker"
@@ -826,6 +829,9 @@ namespace AlphaCar {
             carstrip.brightness = brightness & 0xff;
         }
 
+        /**
+         * Set all RGB one color.
+         */
         //% subcategory="RGB_CTR"
         //% block="car rgb show color $rgb"
         //% rgb.shadow="colorNumberPicker"
@@ -838,7 +844,7 @@ namespace AlphaCar {
 
         /**
         * Rotate LEDs forward.
-        * You need to call ``show`` to make the changes visible.
+        * You need to call ``show`` to make the changes visible
         * @param offset number of pixels to rotate forward, eg: 1
         */
         //% subcategory="RGB_CTR"
@@ -852,7 +858,7 @@ namespace AlphaCar {
         }
 
         /**
-         * Converts red, green, blue channels into a RGB color
+         * Converts red, green, blue channels into a RGB color.
          * @param red value of the red channel between 0 and 255. eg: 255
          * @param green value of the green channel between 0 and 255. eg: 255
          * @param blue value of the blue channel between 0 and 255. eg: 255
