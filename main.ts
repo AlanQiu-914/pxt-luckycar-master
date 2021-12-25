@@ -102,16 +102,6 @@ namespace AlphaCar {
     let _initEvents_center = true
     let _initEvents_side = true
 
-    /**
-    * Select the motor on the left or right
-    */
-    export enum MotorsList {
-        //% blockId="M1" block="M1"
-        M1 = 0,
-        //% blockId="M2" block="M2"
-        M2 = 1
-    }
-
     export enum Direction {
         //% block="Forward" enumval=0
         forward,
