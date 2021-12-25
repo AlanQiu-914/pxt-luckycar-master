@@ -3,6 +3,8 @@
   "AlphaCar.Direction.forward|block": "前进",
   "AlphaCar.Direction.left|block": "左转",
   "AlphaCar.Direction.right|block": "右转",
+  "AlphaCar.CarStopMode.Coast|block":"平缓",
+  "AlphaCar.CarStopMode.Brake|block": "锁死",
   "AlphaCar.forward|block": "全速前进",
   "AlphaCar|block": "阿尔法小车"
 }
