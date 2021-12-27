@@ -1458,7 +1458,7 @@ namespace AlphaCar {
     */
     //% subcategory="Others"
     //% block="HC-SR04 Sonar"
-    //% block.loc.zh-cn="超声波读取距离值"
+    //% block.loc.zh-cn="读取距离值"
     //% weight=55
     export function ultrasonic(): number {
         let duration = 0;
