@@ -238,7 +238,7 @@ namespace AlphaCar {
     /**
      * TODO: Set the speed of left and right wheels. 
      * @param lspeed Left wheel speed , eg: 100
-     * @param rspeed Right wheel speed, eg: -100
+     * @param rspeed Right wheel speed, eg: 100
      */
     //% subcategory="Motors"
     //% block="Set left wheel speed %lspeed\\% |right wheel speed %rspeed\\%"
