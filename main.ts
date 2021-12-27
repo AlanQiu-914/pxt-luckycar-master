@@ -240,7 +240,7 @@ namespace AlphaCar {
      * @param lspeed Left wheel speed , eg: 100
      * @param rspeed Right wheel speed, eg: -100
      */
-    //% subcategory="Motors" subcategory.loc.zh-cn="马达"
+    //% subcategory="马达" 
     //% block="Set left wheel speed %lspeed\\% |right wheel speed %rspeed\\%"
     //% block.loc.zh-cn="设置左侧车轮速度 %lspeed\\% | 右侧车轮速度 %rspeed\\%"
     //% lspeed.min=-100 lspeed.max=100
