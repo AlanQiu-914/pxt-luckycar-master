@@ -83,8 +83,10 @@ const enum IrButton {
 }
 const enum IrButtonAction {
     //% block="pressed"
+    //% block.loc.zh-cn="按下"
     Pressed = 0,
     //% block="released"
+    //% block.loc.zh-cn="松开"
     Released = 1,
 }
 const enum IrProtocol {
