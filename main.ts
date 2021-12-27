@@ -291,7 +291,7 @@ namespace AlphaCar {
     */
     //% subcategory="Motors"
     //% block="Go %dir at speed%speed\\% for %time seconds"
-    //% block.loc.zh-cn="向 %dir 以速度 %speed\\% 持续 %time 秒"
+    //% block.loc.zh-cn="向%dir 以速度 %speed\\% 持续 %time 秒"
     //% weight=95
     export function moveTime(dir: Direction, speed: number, time: number): void {
         if (dir == 0) {
@@ -379,7 +379,7 @@ namespace AlphaCar {
     */
     //% subcategory="Motors"
     //% block="Stop car with %mode"
-    //% block.loc.zh-cn="停车模式：%mode"
+    //% block.loc.zh-cn="停车模式:%mode"
     //% weight=70
     export function stopcar(mode: CarStopMode): void {
         if (mode == 0)
@@ -477,7 +477,7 @@ namespace AlphaCar {
     */
     //% subcategory="LineSensor"
     //% block="Side tracking state is %state"
-    //% block.loc.zh-cn="小车两侧巡线传感器当前状态为 %state"
+    //% block.loc.zh-cn="小车两边巡线传感器当前状态为 %state"
     //% weight=60
     export function sidetracking(state: SideTrackingState): boolean {
         pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
@@ -521,7 +521,7 @@ namespace AlphaCar {
     */
     //% subcategory="LineSensor"
     //% block="On Side %sensor| line %event"
-    //% block.loc.zh-cn="当小车两侧 %sensor 巡线传感器 %event 黑线"
+    //% block.loc.zh-cn="当小车两边 %sensor 巡线传感器 %event 黑线"
     //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
     //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     //% weight=45
