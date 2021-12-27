@@ -399,7 +399,7 @@ namespace AlphaCar {
     */
     //% subcategory="LineSensor"
     //% block="Center tracking state is %state"
-    //% block.loc.zh-cn="小车中间巡线传感器当前状态为 %state"
+    //% block.loc.zh-cn="中间巡线传感器当前状态为 %state"
     //% weight=65
     export function centertracking(state: CenterTrackingState): boolean {
         pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
@@ -477,7 +477,7 @@ namespace AlphaCar {
     */
     //% subcategory="LineSensor"
     //% block="Side tracking state is %state"
-    //% block.loc.zh-cn="小车两边巡线传感器当前状态为 %state"
+    //% block.loc.zh-cn="两边巡线传感器当前状态为 %state"
     //% weight=60
     export function sidetracking(state: SideTrackingState): boolean {
         pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
@@ -507,7 +507,7 @@ namespace AlphaCar {
     */
     //% subcategory="LineSensor"
     //% block="On Center %sensor| line %event"
-    //% block.loc.zh-cn="当小车中间 %sensor 巡线传感器 %event 黑线"
+    //% block.loc.zh-cn="当中间 %sensor 巡线传感器 %event 黑线"
     //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
     //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     //% weight=50
@@ -521,7 +521,7 @@ namespace AlphaCar {
     */
     //% subcategory="LineSensor"
     //% block="On Side %sensor| line %event"
-    //% block.loc.zh-cn="当小车两边 %sensor 巡线传感器 %event 黑线"
+    //% block.loc.zh-cn="当两边 %sensor 巡线传感器 %event 黑线"
     //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
     //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     //% weight=45
@@ -1458,7 +1458,7 @@ namespace AlphaCar {
     */
     //% subcategory="Others"
     //% block="HC-SR04 Sonar"
-    //% block.loc.zh-cn="读取距离值"
+    //% block.loc.zh-cn="超声波读取距离值"
     //% weight=55
     export function ultrasonic(): number {
         let duration = 0;
@@ -1486,7 +1486,7 @@ namespace AlphaCar {
     */
     //% subcategory="Others"
     //% block="%num Brightness value"
-    //% block.loc.zh-cn="小车 %num 光照强度值"
+    //% block.loc.zh-cn="车头 %num 光照强度值"
     //% weight=55
     export function brightness(num: BrightnessChoice): number {
         let mesuBrightness = 0;
