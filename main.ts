@@ -106,12 +106,16 @@ namespace AlphaCar {
 
     export enum Direction {
         //% block="Forward" enumval=0
+        //% block.loc.zh-cn="前进"
         forward,
         //% block="Backward" enumval=1
+        //% block.loc.zh-cn="后退"
         backward,
         //% block="Left" enumval=2
+        //% block.loc.zh-cn="左转"
         left,
         //% block="Right" enumval=3
+        //% block.loc.zh-cn="右转"
         right
     }
 
@@ -120,8 +124,10 @@ namespace AlphaCar {
     */
     export enum CarStopMode {
         //% block="no brake"
+        //% block.loc.zh-cn="平滑"
         Coast,
         //% block="brake"
+        //% block.loc.zh-cn="锁死"
         Brake
     }
     export enum BrightnessChoice {
@@ -137,8 +143,10 @@ namespace AlphaCar {
      */
     export enum CenterTrackPins {
         //% block="Center_Left"
+        //% block.loc.zh-cn="左侧"
         Center_Left = EventBusSource.MICROBIT_ID_IO_P15,
         //% block="Center_Right"
+        //% block.loc.zh-cn="右侧"
         Center_Right = EventBusSource.MICROBIT_ID_IO_P11
     }
 
@@ -147,8 +155,10 @@ namespace AlphaCar {
      */
     export enum SideTrackPins {
         //% block="Side_Left"
+        //% block.loc.zh-cn="左侧"
         Side_Left = EventBusSource.MICROBIT_ID_IO_P7,
         //% block="Side_Right"
+        //% block.loc.zh-cn="右侧"
         Side_Right = EventBusSource.MICROBIT_ID_IO_P6
     }
     /**
@@ -156,8 +166,10 @@ namespace AlphaCar {
     */
     export enum TrackEvents {
         //% block="Found" 
+        //% block.loc.zh-cn="找到"
         FindLine = EventBusValue.MICROBIT_PIN_EVT_FALL,
         //% block="Lost" 
+        //% block.loc.zh-cn="丢失"
         LoseLine = EventBusValue.MICROBIT_PIN_EVT_RISE
     }
     /**
@@ -165,12 +177,16 @@ namespace AlphaCar {
      */
     export enum TrackPinsNum {
         //% block="Center_Left"
+        //% block.loc.zh-cn="中间-左侧"
         Center_Left = 0,
         //% block="Center_Right"
+        //% block.loc.zh-cn="中间-右侧"
         Center_Right = 1,
         //% block="Side_Left"
+        //% block.loc.zh-cn="两边-左侧"
         Side_Left = 2,
         //% block="Side_Right"
+        //% block.loc.zh-cn="两边-右侧"
         Side_Right = 3
     }
     /**
@@ -178,8 +194,10 @@ namespace AlphaCar {
     */
     export enum TrackState {
         //% block="Found" 
+        //% block.loc.zh-cn="找到"
         FindLine = 0,
         //% block="Lost" 
+        //% block.loc.zh-cn="丢失"
         LoseLine = 1
     }
 
@@ -222,8 +240,9 @@ namespace AlphaCar {
      * @param lspeed Left wheel speed , eg: 100
      * @param rspeed Right wheel speed, eg: -100
      */
-    // subcategory="Motors"
+    //% subcategory="Motors"
     //% block="Set left wheel speed %lspeed\\% |right wheel speed %rspeed\\%"
+    //% block.loc.zh-cn="设置左侧车轮速度 %lspeed\\% | 右侧车轮速度 %rspeed\\%"
     //% lspeed.min=-100 lspeed.max=100
     //% rspeed.min=-100 rspeed.max=100
     //% weight=100
