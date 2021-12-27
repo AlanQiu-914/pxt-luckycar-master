@@ -124,8 +124,10 @@ namespace AlphaCar {
     }
     export enum BrightnessChoice {
         //% block="Left" enumval=0
+        //% block.loc.zh-cn="左侧"
         Left,
         //% block="Right" enumval=1
+        //% block.loc.zh-cn="右侧"
         Right
     }
     /**
