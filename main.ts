@@ -240,7 +240,7 @@ namespace AlphaCar {
      * @param lspeed Left wheel speed , eg: 100
      * @param rspeed Right wheel speed, eg: -100
      */
-    //% subcategory="Motors" block.loc.zh-cn="马达"
+    //% subcategory="Motors"
     //% block="Set left wheel speed %lspeed\\% |right wheel speed %rspeed\\%"
     //% block.loc.zh-cn="设置左侧车轮速度 %lspeed\\% | 右侧车轮速度 %rspeed\\%"
     //% lspeed.min=-100 lspeed.max=100
@@ -289,8 +289,9 @@ namespace AlphaCar {
     * @param speed Running speed, eg: 50
     * @param time Travel time, eg: 5
     */
-    // subcategory="Motors"
+    //% subcategory="Motors"
     //% block="Go %dir at speed%speed\\% for %time seconds"
+    //% block.loc.zh-cn="向 %dir 以速度 %speed\\% 持续 %time 秒"
     //% weight=95
     export function moveTime(dir: Direction, speed: number, time: number): void {
         if (dir == 0) {
@@ -317,8 +318,9 @@ namespace AlphaCar {
     /**
     * TODO: full speed move forward,speed is 100.
     */
-    // subcategory="Motors"
+    //% subcategory="Motors"
     //% block="Go straight at full speed"
+    //% block.loc.zh-cn="全速前进"
     //% weight=90
     export function forward(): void {
         pins.analogWritePin(AnalogPin.P0, 1023);
@@ -332,8 +334,9 @@ namespace AlphaCar {
     /**
     * TODO: full speed move back,speed is -100.
     */
-    // subcategory="Motors"
+    //% subcategory="Motors"
     //% block="Reverse at full speed"
+    //% block.loc.zh-cn="全速后退"
     //% weight=85
     export function backforward(): void {
         pins.analogWritePin(AnalogPin.P0, 0);
@@ -346,8 +349,9 @@ namespace AlphaCar {
     /**
     * TODO: full speed turnleft.
     */
-    // subcategory="Motors"
+    //% subcategory="Motors"
     //% block="Turn left at full speed"
+    //%block.loc.zh-cn="全速左转"
     //% weight=80
     export function turnleft(): void {
         pins.analogWritePin(AnalogPin.P0, 1023);
@@ -359,8 +363,9 @@ namespace AlphaCar {
     /**
     * TODO: full speed turnright.
     */
-    // subcategory="Motors"
+    //% subcategory="Motors"
     //% block="Turn right at full speed"
+    //% block.loc.zh-cn="全速右转"
     //% weight=75
     export function turnright(): void {
         pins.analogWritePin(AnalogPin.P0, 0);
@@ -372,8 +377,9 @@ namespace AlphaCar {
     /**
     * TODO: stopcar
     */
-    // subcategory="Motors"
+    //% subcategory="Motors"
     //% block="Stop car with %mode"
+    //% block.loc.zh-cn="停车模式：%mode"
     //% weight=70
     export function stopcar(mode: CarStopMode): void {
         if (mode == 0)
@@ -393,6 +399,7 @@ namespace AlphaCar {
     */
     //% subcategory="LineSensor"
     //% block="Center tracking state is %state"
+    //% block.loc.zh-cn="小车中间巡线传感器当前状态为 %state"
     //% weight=65
     export function centertracking(state: CenterTrackingState): boolean {
         pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
@@ -422,6 +429,7 @@ namespace AlphaCar {
     */
     //% subcategory="LineSensor"
     //% block="Track %side line sensor %state"
+    //% block.loc.zh-cn="%side 巡线传感器 %state 黑线"
     //% state.fieldEditor="gridpicker" state.fieldOptions.columns=2
     //% side.fieldEditor="gridpicker" side.fieldOptions.columns=2
     //% weight=60
@@ -469,6 +477,7 @@ namespace AlphaCar {
     */
     //% subcategory="LineSensor"
     //% block="Side tracking state is %state"
+    //% block.loc.zh-cn="小车两侧巡线传感器当前状态为 %state"
     //% weight=60
     export function sidetracking(state: SideTrackingState): boolean {
         pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
@@ -498,6 +507,7 @@ namespace AlphaCar {
     */
     //% subcategory="LineSensor"
     //% block="On Center %sensor| line %event"
+    //% block.loc.zh-cn="当小车中间 %sensor 巡线传感器 %event 黑线"
     //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
     //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     //% weight=50
@@ -511,6 +521,7 @@ namespace AlphaCar {
     */
     //% subcategory="LineSensor"
     //% block="On Side %sensor| line %event"
+    //% block.loc.zh-cn="当小车两侧 %sensor 巡线传感器 %event 黑线"
     //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
     //%event.fieldEditor="gridpicker" event.fieldOptions.columns=2
     //% weight=45
@@ -546,14 +557,19 @@ namespace AlphaCar {
      */
     export enum RgbNum {
         //% block="left_front"
+        //% block.loc.zh-cn="左前"
         left_front = 4,
         //% block="right_front"
+        //% block.loc.zh-cn="右前"
         right_front = 3,
         //% block="left_dowm"
+        //% block.loc.zh-cn="左后-底部"
         left_dowm = 2,
         //% block="right_dowm"
+        //% block.loc.zh-cn="右后-底部"
         right_dowm = 1,
         //% block="front_dowm"
+        //% block.loc.zh-cn="正前-底部"
         front_dowm = 0
 
     }
@@ -576,11 +592,6 @@ namespace AlphaCar {
              * Shows all LEDs to a given color (range 0-255 for r, g, b).
              * @param rgb RGB color of the LED
              */
-            // subcategory="RGB_CTR"
-            // blockId="neopixel_set_strip_color" block="%strip|show color %rgb=neopixel_colors"
-            // strip.defl=strip
-            // weight=85 blockGap=8
-            // parts="neopixel"
             showColor(rgb: number) {
                 rgb = rgb >> 0;
                 this.setAllRGB(rgb);
@@ -679,9 +690,6 @@ namespace AlphaCar {
             /**
              * Set the pin where the neopixel is connected, defaults to P0.
              */
-            //% subcategory="RGB_CTR"
-            //% weight=10
-            //% parts="neopixel" 
             setPin(pin: DigitalPin): void {
                 this.pin = pin;
                 pins.digitalWritePin(this.pin, 0);
