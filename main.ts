@@ -96,7 +96,6 @@ const enum IrProtocol {
     NEC = 1,
 }
 //% weight=50 color=#e7660b icon="\uf1b9" block="AlphaCar"
-//% namespace.loc.zh-cn="阿尔法小车"
 namespace AlphaCar {
     /**
      * 小车马达、循迹控制
