@@ -805,6 +805,7 @@ namespace AlphaCar {
          */
         //% subcategory="RGB_CTR"
         //% block="Car Rgb Init"
+        //% block.loc.zh-cn="小车RGB彩灯初始化"
         //% weight=100 blockGap=8
         //% parts="neopixel"
         export function car_rgb_init(): void {
@@ -822,6 +823,7 @@ namespace AlphaCar {
          */
         //% subcategory="RGB_CTR"
         //% block="set car pixel color at %pixeloffset|to $rgb"
+        //% block.loc.zh-cn="设置%pixeloffset 灯亮 $rgb"
         //% rgb.shadow="colorNumberPicker"
         //% blockGap=8
         //% weight=80
@@ -837,6 +839,7 @@ namespace AlphaCar {
         */
         //% subcategory="RGB_CTR"
         //% block="set car rgb brightness %brightness" 
+        //% block.loc.zh-cn="设置小车RGB灯亮度为 %brightness"
         //% brightness.min=0 brightness.max=255
         //% blockGap=8
         //% weight=80
@@ -850,6 +853,7 @@ namespace AlphaCar {
          */
         //% subcategory="RGB_CTR"
         //% block="car rgb show color $rgb"
+        //% block.loc.zh-cn="小车所有RGB灯显示 $rgb"
         //% rgb.shadow="colorNumberPicker"
         //% blockGap=8
         //% weight=80
@@ -864,6 +868,7 @@ namespace AlphaCar {
         */
         //% subcategory="RGB_CTR"
         //% block="car rgb rotate" blockGap=8
+        //% block.loc.zh-cn="小车RGB彩灯循环"
         //% weight=80
         //% parts="neopixel"
         export function CarRgbRotate(): void {
@@ -881,6 +886,7 @@ namespace AlphaCar {
         //% subcategory="RGB_CTR"
         //% weight=1
         //% block="red %red|green %green|blue %blue"
+        //% block.loc.zh-cn="红 %red 绿 %green 蓝 %blue"
         export function rgb(red: number, green: number, blue: number): number {
             return packRGB(red, green, blue);
         }
@@ -888,9 +894,6 @@ namespace AlphaCar {
         /**
          * Gets the RGB value of a known color
         */
-        // subcategory="RGB_CTR"
-        // weight=2 blockGap=8
-        // blockId="neopixel_colors" block="%color"
         export function colors(color: number): number {
             return color;
         }
@@ -917,8 +920,6 @@ namespace AlphaCar {
          * @param s saturation from 0 to 99
          * @param l luminosity from 0 to 99
          */
-        // subcategory="RGB_CTR"
-        // blockId=neopixelHSL block="hue %h|saturation %s|luminosity %l"
         export function hsl(h: number, s: number, l: number): number {
             h = Math.round(h);
             s = Math.round(s);
@@ -1033,6 +1034,7 @@ namespace AlphaCar {
     */
     //% subcategory="Others"
     //% block="%colorchoice color is find"
+    //% block.loc.zh-cn="识别到 %colorchoice 色"
     //% weight=1
     export function findcolornum(colorchoice: ColorChoiceValue): boolean {
         let count = 0;
@@ -1371,6 +1373,7 @@ namespace AlphaCar {
     */
     //% subcategory="Others"
     //% block="connect IR receiver at pin P2"
+    //% block.loc.zh-cn="将红外接收模块连接到2号引脚"
     //% pin.fieldEditor="gridpicker"
     //% pin.fieldOptions.columns=4
     //% pin.fieldOptions.tooltips="false"
@@ -1415,6 +1418,7 @@ namespace AlphaCar {
        */
     //% subcategory="Others"
     //% block="on IR button | %button | %action"
+    //% block.loc.zh-cn="当红外遥控器上 %button 键 %action"
     //% button.fieldEditor="gridpicker"
     //% button.fieldOptions.columns=3
     //% button.fieldOptions.tooltips="false"
@@ -1454,6 +1458,7 @@ namespace AlphaCar {
     */
     //% subcategory="Others"
     //% block="HC-SR04 Sonar"
+    //% block.loc.zh-cn="超声波读取距离值"
     //% weight=55
     export function ultrasonic(): number {
         let duration = 0;
@@ -1481,6 +1486,7 @@ namespace AlphaCar {
     */
     //% subcategory="Others"
     //% block="%num Brightness value"
+    //% block.loc.zh-cn="小车 %num 光照强度值"
     //% weight=55
     export function brightness(num: BrightnessChoice): number {
         let mesuBrightness = 0;
