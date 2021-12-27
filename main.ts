@@ -240,7 +240,7 @@ namespace AlphaCar {
      * @param lspeed Left wheel speed , eg: 100
      * @param rspeed Right wheel speed, eg: 100
      */
-    //% subcategory="Motors"
+    //% subcategory="马达控制"
     //% block="Set left wheel speed %lspeed\\% |right wheel speed %rspeed\\%"
     //% block.loc.zh-cn="设置左侧车轮速度 %lspeed\\% | 右侧车轮速度 %rspeed\\%"
     //% lspeed.min=-100 lspeed.max=100
@@ -289,7 +289,7 @@ namespace AlphaCar {
     * @param speed Running speed, eg: 50
     * @param time Travel time, eg: 5
     */
-    //% subcategory="Motors"
+    //% subcategory="马达控制"
     //% block="Go %dir at speed%speed\\% for %time seconds"
     //% block.loc.zh-cn="向%dir 以速度 %speed\\% 持续 %time 秒"
     //% weight=95
@@ -318,7 +318,7 @@ namespace AlphaCar {
     /**
     * TODO: full speed move forward,speed is 100.
     */
-    //% subcategory="Motors"
+    //% subcategory="马达控制"
     //% block="Go straight at full speed"
     //% block.loc.zh-cn="全速前进"
     //% weight=90
@@ -334,7 +334,7 @@ namespace AlphaCar {
     /**
     * TODO: full speed move back,speed is -100.
     */
-    //% subcategory="Motors"
+    //% subcategory="马达控制"
     //% block="Reverse at full speed"
     //% block.loc.zh-cn="全速后退"
     //% weight=85
@@ -349,7 +349,7 @@ namespace AlphaCar {
     /**
     * TODO: full speed turnleft.
     */
-    //% subcategory="Motors"
+    //% subcategory="马达控制"
     //% block="Turn left at full speed"
     //%block.loc.zh-cn="全速左转"
     //% weight=80
@@ -363,7 +363,7 @@ namespace AlphaCar {
     /**
     * TODO: full speed turnright.
     */
-    //% subcategory="Motors"
+    //% subcategory="马达控制"
     //% block="Turn right at full speed"
     //% block.loc.zh-cn="全速右转"
     //% weight=75
@@ -377,7 +377,7 @@ namespace AlphaCar {
     /**
     * TODO: stopcar
     */
-    //% subcategory="Motors"
+    //% subcategory="马达控制"
     //% block="Stop car with %mode"
     //% block.loc.zh-cn="停车模式:%mode"
     //% weight=70
@@ -397,7 +397,7 @@ namespace AlphaCar {
     * Judging the Current Status of Center Tracking Module. 
     * @param state Four states of Center tracking module, eg: TrackingState.C_L_R_line
     */
-    //% subcategory="LineSensor"
+    //% subcategory="巡线传感器"
     //% block="Center tracking state is %state"
     //% block.loc.zh-cn="中间巡线传感器当前状态为 %state"
     //% weight=65
@@ -427,7 +427,7 @@ namespace AlphaCar {
     * @param side Line sensor edge , eg: CenterTrackPins.Left
     * @param state Line sensor status, eg: TrackState.FindLine
     */
-    //% subcategory="LineSensor"
+    //% subcategory="巡线传感器"
     //% block="Track %side line sensor %state"
     //% block.loc.zh-cn="%side 巡线传感器 %state 黑线"
     //% state.fieldEditor="gridpicker" state.fieldOptions.columns=2
@@ -475,7 +475,7 @@ namespace AlphaCar {
     * Judging the Current Status of Side Tracking Module. 
     * @param state Four states of Side tracking module, eg: TrackingState.C_L_R_line
     */
-    //% subcategory="LineSensor"
+    //% subcategory="巡线传感器"
     //% block="Side tracking state is %state"
     //% block.loc.zh-cn="两边巡线传感器当前状态为 %state"
     //% weight=60
@@ -505,7 +505,7 @@ namespace AlphaCar {
     /**
     * TODO: Runs when center line sensor finds or loses.
     */
-    //% subcategory="LineSensor"
+    //% subcategory="巡线传感器"
     //% block="On Center %sensor| line %event"
     //% block.loc.zh-cn="当中间 %sensor 巡线传感器 %event 黑线"
     //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
@@ -519,7 +519,7 @@ namespace AlphaCar {
     /**
     * TODO: Runs when side line sensor finds or loses.
     */
-    //% subcategory="LineSensor"
+    //% subcategory="巡线传感器"
     //% block="On Side %sensor| line %event"
     //% block.loc.zh-cn="当两边 %sensor 巡线传感器 %event 黑线"
     //%sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
@@ -803,7 +803,7 @@ namespace AlphaCar {
         /**
          * Rgb init.
          */
-        //% subcategory="RGB_CTR"
+        //% subcategory="RGB彩灯"
         //% block="Car Rgb Init"
         //% block.loc.zh-cn="小车RGB彩灯初始化"
         //% weight=100 blockGap=8
@@ -821,7 +821,7 @@ namespace AlphaCar {
         /**
          * Set each RGB color.
          */
-        //% subcategory="RGB_CTR"
+        //% subcategory="RGB彩灯"
         //% block="set car pixel color at %pixeloffset|to $rgb"
         //% block.loc.zh-cn="设置%pixeloffset 灯亮 $rgb"
         //% rgb.shadow="colorNumberPicker"
@@ -837,7 +837,7 @@ namespace AlphaCar {
         * Set the brightness of the car rgb. This flag only applies to future operation.
         * @param brightness a measure of LED brightness in 0-255. eg: 255
         */
-        //% subcategory="RGB_CTR"
+        //% subcategory="RGB彩灯"
         //% block="set car rgb brightness %brightness" 
         //% block.loc.zh-cn="设置小车RGB灯亮度为 %brightness"
         //% brightness.min=0 brightness.max=255
@@ -851,7 +851,7 @@ namespace AlphaCar {
         /**
          * Set all RGB one color.
          */
-        //% subcategory="RGB_CTR"
+        //% subcategory="RGB彩灯"
         //% block="car rgb show color $rgb"
         //% block.loc.zh-cn="小车所有RGB灯显示 $rgb"
         //% rgb.shadow="colorNumberPicker"
@@ -866,7 +866,7 @@ namespace AlphaCar {
         * Rotate LEDs forward.
         * @param offset number of pixels to rotate forward, eg: 1
         */
-        //% subcategory="RGB_CTR"
+        //% subcategory="RGB彩灯"
         //% block="car rgb rotate" blockGap=8
         //% block.loc.zh-cn="小车RGB彩灯循环"
         //% weight=80
@@ -883,7 +883,7 @@ namespace AlphaCar {
          * @param green value of the green channel between 0 and 255. eg: 255
          * @param blue value of the blue channel between 0 and 255. eg: 255
          */
-        //% subcategory="RGB_CTR"
+        //% subcategory="RGB彩灯"
         //% weight=1
         //% block="red %red|green %green|blue %blue"
         //% block.loc.zh-cn="红 %red 绿 %green 蓝 %blue"
@@ -1032,7 +1032,7 @@ namespace AlphaCar {
     /**
     * TODO: find the color
     */
-    //% subcategory="Others"
+    //% subcategory="其它"
     //% block="%colorchoice color is find"
     //% block.loc.zh-cn="识别到 %colorchoice 色"
     //% weight=1
@@ -1371,7 +1371,7 @@ namespace AlphaCar {
     * @param pin IR receiver pin, eg: DigitalPin.P0
     * @param protocol IR protocol, eg: IrProtocol.Keyestudio
     */
-    //% subcategory="Others"
+    //% subcategory="其它"
     //% block="connect IR receiver at pin P2"
     //% block.loc.zh-cn="将红外接收模块连接到2号引脚"
     //% pin.fieldEditor="gridpicker"
@@ -1416,7 +1416,7 @@ namespace AlphaCar {
        * @param action the trigger action
        * @param handler body code to run when the event is raised
        */
-    //% subcategory="Others"
+    //% subcategory="其它"
     //% block="on IR button | %button | %action"
     //% block.loc.zh-cn="当红外遥控器上 %button 键 %action"
     //% button.fieldEditor="gridpicker"
@@ -1456,7 +1456,7 @@ namespace AlphaCar {
     /**
     * Cars can extend the ultrasonic function to prevent collisions and other functions.. 
     */
-    //% subcategory="Others"
+    //% subcategory="其它"
     //% block="HC-SR04 Sonar"
     //% block.loc.zh-cn="超声波读取距离值"
     //% weight=55
@@ -1484,7 +1484,7 @@ namespace AlphaCar {
     /**
     * Cars read brightness on Left and right
     */
-    //% subcategory="Others"
+    //% subcategory="其它"
     //% block="%num Brightness value"
     //% block.loc.zh-cn="车头 %num 光照强度值"
     //% weight=55
