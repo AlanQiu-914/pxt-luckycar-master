@@ -1471,14 +1471,14 @@ namespace AlphaCar {
         pins.digitalWritePin(DigitalPin.P14, 0);
         duration = pins.pulseIn(DigitalPin.P14, PulseValue.High, 50000); // Max duration 50 ms
 
-        RangeInCentimeters = duration * 153 / 44 / 2 / 100;
+        RangeInCentimeters = duration * 153 / 29 / 2 / 100;
 
         if (RangeInCentimeters > 0) distanceBackup = RangeInCentimeters;
         else RangeInCentimeters = distanceBackup;
 
         basic.pause(50);
 
-        return RangeInCentimeters;
+        return Math.round(RangeInCentimeters);
     }
 
     /**
