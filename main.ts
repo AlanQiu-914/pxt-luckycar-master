@@ -1473,8 +1473,8 @@ namespace AlphaCar {
 
         RangeInCentimeters = duration * 153 / 29 / 2 / 100;
 
-       // if (RangeInCentimeters > 0) distanceBackup = RangeInCentimeters;
-       // else RangeInCentimeters = distanceBackup;
+        if (RangeInCentimeters > 0) distanceBackup = RangeInCentimeters;
+        else RangeInCentimeters = distanceBackup;
 
         basic.pause(50);
 
